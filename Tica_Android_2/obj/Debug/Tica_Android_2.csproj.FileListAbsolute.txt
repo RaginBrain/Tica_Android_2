@@ -1,0 +1,16 @@
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Tica_Android_2.dll
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Tica_Android_2.pdb
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Tica_Android_2.dll.mdb
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Tica_Android_2.Tica_Android_2.apk
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Tica_Android_2.Tica_Android_2-Signed.apk
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\Lidgren.Network.dll
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\bin\Debug\MonoGame.Framework.dll
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\Tica_Android_2.csprojResolveAssemblyReference.cache
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\Tica_Android_2.dll
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\Tica_Android_2.pdb
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\android\bin\Tica_Android_2.Tica_Android_2.apk
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\res\drawable\icon.png
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\res\drawable\splash.png
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\res\values\styles.xml
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\R.cs.flag
+C:\Users\Ante\Documents\Projects\Tica_Android_2\Tica_Android_2\obj\Debug\uploadflags.txt
