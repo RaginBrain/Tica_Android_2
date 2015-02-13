@@ -14,6 +14,7 @@ using System.IO.IsolatedStorage;
 
 namespace Tica_Android_2
 {
+
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
