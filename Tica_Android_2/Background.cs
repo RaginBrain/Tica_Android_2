@@ -164,7 +164,7 @@ namespace Tica_Android_2
 
 
 
-			playerAnimation.Position=new Vector2(rectangle.Location.X,rectangle.Location.Y);
+			playerAnimation.Position=new Vector2(rectangle.Location.X,rectangle.Location.Y-(int)(rectangle.Height)/3);
 			playerAnimation.Update(gameTime);
 		}
 

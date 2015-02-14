@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System.Collections.Generic;
 
 namespace Tica_Android_2
 {
@@ -42,7 +43,7 @@ namespace Tica_Android_2
 
 		public int level;
 		public int bonus;
-		public void Update(Player igrac, int broj)
+		public void Update(Player igrac, int broj, ref int udaljenost_barijera)
 		{
 			rectangle.X -= brzina_kretanja;
 
@@ -50,9 +51,10 @@ namespace Tica_Android_2
 			if (rectangle.X < -50)
 			{
 				rectangle.X =1000+bonus;
-				bonus += (int)(bonus*1.4);
+				bonus += (int)(bonus*1.8);
 				rectangle.Y = broj;
 				level += 1;
+				udaljenost_barijera = 350;
 
 			}
 		}
@@ -69,7 +71,7 @@ namespace Tica_Android_2
 	{
 		protected Random r = new Random();
 
-		public virtual void Update(Player igrac,int broj,int udaljenost,int sirina)
+		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista)
 		{
 
 
@@ -77,7 +79,7 @@ namespace Tica_Android_2
 			if (Dodir(igrac))
 			if (igrac.stit == true)
 			{
-				rectangle.Y = udaljenost;
+				rectangle.Y = visina;
 				igrac.stit = false;
 			}
 			else
@@ -85,8 +87,16 @@ namespace Tica_Android_2
 
 			if (rectangle.X < -50)
 			{
-				rectangle.X = sirina;
-				rectangle.Y = broj;
+				rectangle.X = lista[lista.Count-1].rectangle.X+dodatak;
+				int visina_zadnje = lista [lista.Count - 1].rectangle.Y;
+				if (visina_zadnje > visina / 2)
+					rectangle.Y = r.Next (0, (int)(visina/2));
+				else
+					rectangle.Y = r.Next ((int)(visina/2), visina-visina/5);
+
+				lista.RemoveAt (0);
+				lista.Add (this);
+				dodatak = (int)(dodatak * 0.975f);
 			}
 		}
 		public Barijera(Texture2D tex, Rectangle rect)
@@ -125,9 +135,9 @@ namespace Tica_Android_2
 
 		}
 
-		public override void Update(Player igrac,int broj,int udaljenost,int sirina)
+		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista)
 		{
-			base.Update (igrac,broj,udaljenost,sirina);
+			base.Update (igrac,ref dodatak,visina,sirina,lista);
 			if (rectangle.X < -20)
 			{
 				brzina_gibanja = r.Next(1, 3);

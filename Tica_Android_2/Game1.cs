@@ -58,10 +58,14 @@ namespace Tica_Android_2
 		Random r = new Random();
 		int mjera;
 
+		int udaljenost_barijera;
+
 		int sljedeciLevel;
 		Scrolling scrolling1;
 		Scrolling scrolling2;
 		Player player1;
+
+		List<Barijera> red_prepreka;
 
 
 		TouchCollection touchCollection;
@@ -102,7 +106,10 @@ namespace Tica_Android_2
 			currentGameState = GameState.Start;
 
 
-			//janje1f
+
+
+
+			//gamesave
 			if (savegameStorage.FileExists("high_score.txt")) 
 			{
 				IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream ("high_score.txt", FileMode.OpenOrCreate,FileAccess.Read);
@@ -123,12 +130,13 @@ namespace Tica_Android_2
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch (GraphicsDevice);
+			red_prepreka = new List<Barijera> ();
 
 			//TODO: use this.Content to load your game content here 
 			scrolling1 = new Scrolling(Content.Load<Texture2D>("bg1"), new Rectangle(0, 0, sirina, visina), 3);
 			scrolling2 = new Scrolling(Content.Load<Texture2D>("bg2"), new Rectangle(sirina, 0,sirina, visina), 3);
 
-			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0, 50, 57));
+			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0, 50, 40));
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
 
 
@@ -158,13 +166,28 @@ namespace Tica_Android_2
 			game_over.rectangle = new Rectangle (-visina, 0, 300, 409);
 			game_over.texture=Content.Load<Texture2D>("game_over");
 
-			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(2200, 0,  80,  80));
+
+
 			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64));
-			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1000, 250,150, 50));
+			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, 250,150, 50));
+
+			udaljenost_barijera = 350;
+
 			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1000, 0, 35, 100));
-			barijera1 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(1250, 100, 35, 100), false, visina);
-			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1500, 400, 35, 100));
-			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(1750, 500, 35, 100), true, sirina);
+			red_prepreka.Add (barijera);
+
+			barijera1 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"),
+				new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera, 100, 35, 100), false, visina);
+			red_prepreka.Add (barijera1);
+
+			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[1].rectangle.X+udaljenost_barijera, 400, 35, 100));
+			red_prepreka.Add (barijera2);
+
+			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 500, 35, 100), true, sirina);
+			red_prepreka.Add (barijera3);
+
+			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 0,  80,  80));
+			red_prepreka.Add (maca);
 		}
 
 		/// <summary>
@@ -227,16 +250,16 @@ namespace Tica_Android_2
 				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
 
 				int t = r.Next (5, 30);
-				maca.Update (player1, t, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth * 3);
+				maca.Update (player1,ref udaljenost_barijera,visina, sirina* 3,red_prepreka);
 
 				//triba uštimat s velicinom sprite-a
 				///////////////////////////////////////
-				int interval = (int)(graphics.PreferredBackBufferWidth - graphics.PreferredBackBufferWidth / 2);
-				barijera.Update (player1, r.Next (0, interval), graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
-				barijera1.Update (player1, r.Next (0, interval), graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
-				barijera2.Update (player1, r.Next (0, interval), graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
-				barijera3.Update (player1, r.Next (0, interval), graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
-				lvlUp.Update (player1, 300);
+
+				barijera.Update (player1,ref udaljenost_barijera, visina, sirina,red_prepreka);
+				barijera1.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
+				barijera2.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
+				barijera3.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
+				lvlUp.Update (player1, 300,ref udaljenost_barijera);
 
 				if (sljedeciLevel == lvlUp.level)
 					LelevUp ();
