@@ -94,6 +94,7 @@
     <AndroidAsset Include="Assets\Content\Znamenke\7.png" />
     <AndroidAsset Include="Assets\Content\Znamenke\8.png" />
     <AndroidAsset Include="Assets\Content\Znamenke\9.png" />
+    <AndroidAsset Include="Assets\Content\pila.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
