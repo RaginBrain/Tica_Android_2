@@ -15,6 +15,7 @@ namespace Tica_Android_2
 		public int brzina_kretanja;
 		public Texture2D texture;
 		public Rectangle rectangle;
+		public Rectangle colision_rect;
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Draw(texture, rectangle, Color.White);
@@ -137,6 +138,8 @@ namespace Tica_Android_2
 
 			rectangle.X += (int)(Velocity.X );
 			rectangle.Y += (int)(Velocity.Y);
+			colision_rect.X = rectangle.X+(int)(rectangle.Width*0.4f);
+			colision_rect.Y = rectangle.Y+ (int)(rectangle.Height*0.6f);
 			//kretanje zavrsava ovdje ***************************************************
 
 			if (alive)
@@ -164,7 +167,7 @@ namespace Tica_Android_2
 
 
 
-			playerAnimation.Position=new Vector2(rectangle.Location.X,rectangle.Location.Y-(int)(rectangle.Height)/3);
+			playerAnimation.Position=new Vector2(rectangle.Location.X,rectangle.Location.Y);
 			playerAnimation.Update(gameTime);
 		}
 
@@ -179,6 +182,8 @@ namespace Tica_Android_2
 			score = 0;
 			stit = false;
 			playerAnimation.Image = tex;
+			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rect.Width*0.9f), (int)(rect.Height * 0.8f));
+
 		}
 	}
 

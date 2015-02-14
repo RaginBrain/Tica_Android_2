@@ -47,7 +47,7 @@ namespace Tica_Android_2
 		public void Initialize()
 		{
 			active = false;
-			amountofFrames = new Vector2(5, 3);
+
 			switchFrame = Image.Width;
 		}
 

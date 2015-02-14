@@ -17,7 +17,7 @@ namespace Tica_Android_2
 		public void Update(Player igrac, int broj, LevelUp lvl)
 		{
 			rectangle.X -= brzina_kretanja+1;
-			if (rectangle.Intersects(igrac.rectangle))
+			if (rectangle.Intersects(igrac.colision_rect))
 			{
 				igrac.stit = true;
 				rectangle.Y = 1000;
@@ -50,11 +50,11 @@ namespace Tica_Android_2
 
 			if (rectangle.X < -50)
 			{
-				rectangle.X =1000+bonus;
-				bonus += (int)(bonus*1.8);
+				rectangle.X =1500+bonus;
+				bonus += (int)(bonus*1.7);
 				rectangle.Y = broj;
 				level += 1;
-				udaljenost_barijera = 350;
+				udaljenost_barijera = 300;
 
 			}
 		}
@@ -76,14 +76,16 @@ namespace Tica_Android_2
 
 
 			rectangle.X -= brzina_kretanja;
-			if (Dodir(igrac))
-			if (igrac.stit == true)
-			{
-				rectangle.Y = visina;
+			if (Dodir (igrac))
+			if (igrac.stit == true) {
+				rectangle.Y = 2 * visina;
 				igrac.stit = false;
+
 			}
 			else
 				igrac.alive = false;
+
+
 
 			if (rectangle.X < -50)
 			{
@@ -96,7 +98,7 @@ namespace Tica_Android_2
 
 				lista.RemoveAt (0);
 				lista.Add (this);
-				dodatak = (int)(dodatak * 0.975f);
+				dodatak = (int)(dodatak * 0.96f);
 			}
 		}
 		public Barijera(Texture2D tex, Rectangle rect)
@@ -111,7 +113,7 @@ namespace Tica_Android_2
 
 		public bool Dodir(Player igrac)
 		{
-			if( rectangle.Intersects(igrac.rectangle))
+			if( rectangle.Intersects(igrac.colision_rect))
 				return true;
 			else
 				return false;
