@@ -43,6 +43,7 @@ namespace Tica_Android_2
 	{
 		public Animation playerAnimation=new Animation();
 
+
 		public TouchCollection touchCollection;
 		public Texture2D texture_stit;
 		public float speed;
@@ -70,7 +71,7 @@ namespace Tica_Android_2
 		{
 		}
 
-		public void Update(GameTime gameTime,int visina_ekrana, int duljina)
+		public void Update(GameTime gameTime,int visina_ekrana, int duljina,float resize_scale)
 		{
 
 			playerAnimation.active = true;
@@ -138,8 +139,13 @@ namespace Tica_Android_2
 
 			rectangle.X += (int)(Velocity.X );
 			rectangle.Y += (int)(Velocity.Y);
-			colision_rect.X = rectangle.X+(int)(rectangle.Width*0.4f);
-			colision_rect.Y = rectangle.Y+ (int)(rectangle.Height*0.6f);
+			colision_rect.X = rectangle.X + (int)(rectangle.Width * 0.4f);
+			colision_rect.Y = rectangle.Y + (int)(rectangle.Height * 0.6f);
+
+			if (resize_scale > 1) {
+				rectangle.X *= (int)(0.4 * resize_scale);
+				rectangle.Y *= (int)(0.4 * resize_scale);
+			}
 			//kretanje zavrsava ovdje ***************************************************
 
 			if (alive)
@@ -172,17 +178,18 @@ namespace Tica_Android_2
 		}
 
 
-		public Player(Texture2D tex,Texture2D tex_stit,Rectangle rect)
+		public Player(Texture2D tex,Texture2D tex_stit,Rectangle rect,float resize_scale)
 		{
 			speed = 6;
 			texture = tex;
 			texture_stit = tex_stit;
-			rectangle = rect;
+			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			alive = true;
 			score = 0;
 			stit = false;
 			playerAnimation.Image = tex;
-			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rect.Width*0.9f), (int)(rect.Height * 0.8f));
+			playerAnimation.origin = new Vector2 (tex.Width / 10, tex.Height / 6);
+			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.9f), (int)(rectangle.Height * 0.8f));
 
 		}
 	}

@@ -19,8 +19,14 @@ namespace Tica_Android_2
 	/// This is the main type for your game
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
-	{
-		Texture2D test_tex;
+	{	
+		Vector2 pozicija_igrac;
+		float scale;
+		string qualifier;
+		float screenratio;
+		Texture2D txx;
+
+
 		enum GameState { Start, InGame, GameOver };
 		GameState currentGameState = GameState.InGame;
 
@@ -86,8 +92,11 @@ namespace Tica_Android_2
 
 			graphics.ApplyChanges();
 			graphics.IsFullScreen = true;
+
 			sirina = graphics.PreferredBackBufferWidth;
 			visina = graphics.PreferredBackBufferHeight;
+
+			scale = ((float)(((float)visina / 480f) + ((float)sirina / 800f)) / 2f)-0.1f;
 			Content.RootDirectory = "Content";
 		}
 
@@ -138,17 +147,20 @@ namespace Tica_Android_2
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch (GraphicsDevice);
+
+			txx = Content.Load<Texture2D> ("kocka");
 			red_prepreka = new List<Barijera> ();
 
 			//TODO: use this.Content to load your game content here 
 			scrolling1 = new Scrolling(Content.Load<Texture2D>("bg1"), new Rectangle(0, 0, sirina, visina), 3);
 			scrolling2 = new Scrolling(Content.Load<Texture2D>("bg2"), new Rectangle(sirina, 0,sirina, visina), 3);
 
-			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0, 50, 40));
+			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0,50, 40),scale);
+
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
 
 
-			test_tex = Content.Load<Texture2D> ("kocka");
+
 			//dodavanje znamenaka
 			lista_txtr = new List<Texture2D> ();
 			lista_txtr.Add (Content.Load<Texture2D> ("Znamenke/0"));
@@ -264,7 +276,8 @@ namespace Tica_Android_2
 				rezultat.Update (player1.score);
 
 				stit.Update (player1, 350, lvlUp);
-				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth);
+				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth,scale);
+				pozicija_igrac = new Vector2 (player1.rectangle.X+(player1.playerAnimation.FrameWith/2 * scale), player1.rectangle.Y+(player1.playerAnimation.FrameHeight/2 * scale));
 
 				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
 				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
@@ -388,10 +401,19 @@ namespace Tica_Android_2
 					maca2.Draw (spriteBatch);
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
 					// stit.Draw(spriteBatch);
+
 					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale, SpriteEffects.None, 0);
 
-					player1.playerAnimation.Draw (spriteBatch);
+					spriteBatch.Draw (
+						player1.texture
+						, new Vector2(player1.rectangle.X+(player1.playerAnimation.FrameWith/2),player1.rectangle.Y+(player1.playerAnimation.FrameHeight/2))
+						, player1.playerAnimation.suorceRect, Color.White, 0, player1.playerAnimation.origin,scale, SpriteEffects.None, 0
+					);
 
+					spriteBatch.Draw (txx, player1.colision_rect, Color.White);
+
+					//player1.playerAnimation.Draw (spriteBatch);
+				
 					spriteBatch.End ();
 					break;
 				}

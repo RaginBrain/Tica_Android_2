@@ -13,10 +13,11 @@ namespace Tica_Android_2
 		public int switchFrame;
 
 		public Vector2 position;
-		Vector2 amountofFrames, currentFrame;
+		Vector2 currentFrame;
 		public Texture2D Image;
-		Rectangle suorceRect;
+		public Rectangle suorceRect;
 		public bool active;
+		public Vector2 origin; //postavlja se iz klase Igrac
 
 		public Vector2 CurrentFrame
 		{
@@ -32,12 +33,12 @@ namespace Tica_Android_2
 
 		public int FrameWith
 		{
-			get { return Image.Width / (int)amountofFrames.X; }
+			get { return Image.Width / 5; }
 		}
 
 		public int FrameHeight
 		{
-			get { return Image.Height / (int)amountofFrames.Y; }
+			get { return Image.Height / 3; }
 		}
 
 
