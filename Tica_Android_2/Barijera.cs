@@ -29,10 +29,10 @@ namespace Tica_Android_2
 				rectangle.Y = broj;
 			}
 		}
-		public Stit(Texture2D tex, Rectangle rect)
+		public Stit(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle = rect;
+			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
 
 		}
@@ -58,10 +58,10 @@ namespace Tica_Android_2
 
 			}
 		}
-		public LevelUp(Texture2D tex, Rectangle rect)
+		public LevelUp(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle = rect;
+			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
 			level = 1;
 			bonus = 400;
@@ -101,10 +101,10 @@ namespace Tica_Android_2
 				dodatak = (int)(dodatak * 0.96f);
 			}
 		}
-		public Barijera(Texture2D tex, Rectangle rect)
+		public Barijera(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle = rect;
+			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja =(int) 3;
 		}
 		public Barijera()
@@ -126,14 +126,14 @@ namespace Tica_Android_2
 		int visina;
 		public bool gori;
 		public int brzina_gibanja;
-		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int v)
+		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int vis,float resize_scale)
 		{
 			gori = x;
 			texture = tex;
-			rectangle = rect;
+			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = 3;
 			brzina_gibanja = r.Next(1, 4);
-			visina = v;
+			visina = vis;
 
 		}
 

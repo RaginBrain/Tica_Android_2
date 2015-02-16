@@ -20,7 +20,6 @@ namespace Tica_Android_2
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{	
-		Vector2 pozicija_igrac;
 		float scale;
 		string qualifier;
 		float screenratio;
@@ -189,32 +188,32 @@ namespace Tica_Android_2
 
 
 
-			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64));
-			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, 250,150, 50));
+			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64),scale);
+			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, 250,150, 50),scale);
 
 			udaljenost_barijera = 300;
 
-			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1000, 0, 35, 100));
+			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1000, 0, 35, 100),scale);
 			red_prepreka.Add (barijera);
 
-			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera,250,  80,  80));
+			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera,250,  80,  80),scale);
 			red_prepreka.Add (maca2);
 
 			barijera1 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"),
-				new Rectangle(red_prepreka[1].rectangle.X+udaljenost_barijera, 100, 35, 100), false, visina);
+				new Rectangle(red_prepreka[1].rectangle.X+udaljenost_barijera, 100, 35, 100), false, visina,scale);
 			red_prepreka.Add (barijera1);
 
 			//pila----------------
-			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80));
+			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80),scale);
 			red_prepreka.Add (pila);
 			pila_origin = new Vector2 (pila.texture.Width/ 2, pila.texture.Height/ 2);
-			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width));
+			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width))*scale;
 			//--------------------
-			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100));
+			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100),scale);
 			red_prepreka.Add (barijera2);
-			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[4].rectangle.X+udaljenost_barijera, 500, 35, 100), true, sirina);
+			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[4].rectangle.X+udaljenost_barijera, 500, 35, 100), true, sirina,scale);
 			red_prepreka.Add (barijera3);
-			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[5].rectangle.X+udaljenost_barijera,200,  80,  80));
+			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[5].rectangle.X+udaljenost_barijera,200,  80,  80),scale);
 			red_prepreka.Add (maca);
 
 		}
@@ -267,8 +266,8 @@ namespace Tica_Android_2
 					scrolling1.rectangle.X = scrolling2.rectangle.X + scrolling1.rectangle.Width;
 				if (scrolling2.rectangle.X + graphics.PreferredBackBufferWidth <= 0)
 					scrolling2.rectangle.X = scrolling1.rectangle.X + scrolling1.rectangle.Width;
-				scrolling1.Update ();
-				scrolling2.Update ();
+				scrolling1.Update (scale);
+				scrolling2.Update (scale);
 				//******************************************************************************
 
 
@@ -277,7 +276,6 @@ namespace Tica_Android_2
 
 				stit.Update (player1, 350, lvlUp);
 				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth,scale);
-				pozicija_igrac = new Vector2 (player1.rectangle.X+(player1.playerAnimation.FrameWith/2 * scale), player1.rectangle.Y+(player1.playerAnimation.FrameHeight/2 * scale));
 
 				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
 				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
@@ -401,8 +399,9 @@ namespace Tica_Android_2
 					maca2.Draw (spriteBatch);
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
 					// stit.Draw(spriteBatch);
+					spriteBatch.Draw (txx, pila.rectangle, Color.White);
+					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale+0.1f, SpriteEffects.None, 0);
 
-					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale, SpriteEffects.None, 0);
 
 					spriteBatch.Draw (
 						player1.texture

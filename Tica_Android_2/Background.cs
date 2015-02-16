@@ -13,6 +13,8 @@ namespace Tica_Android_2
 	{
 
 		public int brzina_kretanja;
+		public float speed_buffer;
+
 		public Texture2D texture;
 		public Rectangle rectangle;
 		public Rectangle colision_rect;
@@ -30,11 +32,16 @@ namespace Tica_Android_2
 			texture = newTexture;
 			rectangle = newRectangle;
 			brzina_kretanja = brzina;
+			speed_buffer = 0;
 		}
 
-		public void Update()
+		public void Update(float speed_scale)
 		{
-			rectangle.X -= brzina_kretanja;
+			speed_buffer += brzina_kretanja*speed_scale;
+			if (speed_buffer > 1) {
+				rectangle.X -= 1;
+				speed_buffer--;
+			}
 		}
 
 	}
@@ -85,7 +92,7 @@ namespace Tica_Android_2
 				if ((tl.State == TouchLocationState.Pressed)
 					|| (tl.State == TouchLocationState.Moved))
 				{
-					centar = rectangle.Center;
+					centar = colision_rect.Center;
 					udaljenost_Y =(int) Math.Abs (centar.Y - tl.Position.Y);
 					udajenost_X =(int) Math.Abs (centar.X - tl.Position.X);
 
@@ -105,27 +112,27 @@ namespace Tica_Android_2
 
 
 
-					if (tl.Position.Y < centar.Y-rectangle.Height/2)
+					if (tl.Position.Y < centar.Y-colision_rect.Height/2)
 					{
 						if (Velocity.Y > 0)
 							Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.3f*faktor_Y;
 						Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 					}
 
-					else if(tl.Position.Y>centar.Y+rectangle.Height/2)
+					else if(tl.Position.Y>centar.Y+colision_rect.Height/2)
 					{
 						if (Velocity.Y < 0)
 							Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.3f*faktor_Y;
 						Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds*faktor_Y;
 					}
 
-					if (tl.Position.X < centar.X-rectangle.Width/2) 
+					if (tl.Position.X < centar.X-colision_rect.Width/2) 
 					{
 						if (Velocity.X > 0)
 							Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.3f*faktor_X;
 						Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds*faktor_X;
 					}
-					else if(tl.Position.X > centar.X+rectangle.Width/2)
+					else if(tl.Position.X > centar.X+colision_rect.Width/2)
 					{
 						if (Velocity.X < 0)
 							Velocity.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.3f*faktor_X;
@@ -137,15 +144,13 @@ namespace Tica_Android_2
 
 
 
-			rectangle.X += (int)(Velocity.X );
-			rectangle.Y += (int)(Velocity.Y);
-			colision_rect.X = rectangle.X + (int)(rectangle.Width * 0.4f);
-			colision_rect.Y = rectangle.Y + (int)(rectangle.Height * 0.6f);
+			rectangle.X += (int)(Math.Round(Velocity.X) );
+			rectangle.Y += (int)(Math.Round(Velocity.Y));
 
-			if (resize_scale > 1) {
-				rectangle.X *= (int)(0.4 * resize_scale);
-				rectangle.Y *= (int)(0.4 * resize_scale);
-			}
+			colision_rect.X = rectangle.X + (int)(playerAnimation.FrameWith/3.5f);
+			colision_rect.Y = rectangle.Y + (int)(playerAnimation.FrameHeight/2.5f);
+
+
 			//kretanje zavrsava ovdje ***************************************************
 
 			if (alive)
