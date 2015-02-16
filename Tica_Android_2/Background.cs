@@ -39,8 +39,8 @@ namespace Tica_Android_2
 		{
 			speed_buffer += brzina_kretanja*speed_scale;
 			if (speed_buffer > 1) {
-				rectangle.X -= 1;
-				speed_buffer--;
+				rectangle.X -=(int)speed_buffer;
+				speed_buffer-=(float)((int)speed_buffer);
 			}
 		}
 
@@ -93,22 +93,22 @@ namespace Tica_Android_2
 					|| (tl.State == TouchLocationState.Moved))
 				{
 					centar = colision_rect.Center;
-					udaljenost_Y =(int) Math.Abs (centar.Y - tl.Position.Y);
-					udajenost_X =(int) Math.Abs (centar.X - tl.Position.X);
+					udaljenost_Y =(int)( Math.Abs (centar.Y - tl.Position.Y)*resize_scale);
+					udajenost_X =(int)( Math.Abs (centar.X - tl.Position.X)*resize_scale);
 
 
 					float faktor_X;
 					float faktor_Y;
 
-					if (udajenost_X / 100 < 1f)
+					if ((float)udajenost_X / 100f < resize_scale)
 						faktor_X = 0.5f + udajenost_X / (100);
 					else
-						faktor_X = 1.5f;
+						faktor_X = 1.6f;
 
-					if (udajenost_X / 100 < 1f)
+					if ((float)udaljenost_Y / 100f < resize_scale)
 						faktor_Y = 0.5f + udaljenost_Y / (100);
 					else
-						faktor_Y = 1.5f;
+						faktor_Y = 1.6f;
 
 
 
@@ -149,7 +149,7 @@ namespace Tica_Android_2
 
 			colision_rect.X = rectangle.X + (int)(playerAnimation.FrameWith/3.5f);
 			colision_rect.Y = rectangle.Y + (int)(playerAnimation.FrameHeight/2.5f);
-
+			//skroz je labav uvijet jer ovisi o texturi!!!
 
 			//kretanje zavrsava ovdje ***************************************************
 
@@ -157,18 +157,12 @@ namespace Tica_Android_2
 				score += 1;
 
 			//uvjet za odbijanje, svi faktori su empiristički uštimani*******************
-			if (rectangle.Y > visina_ekrana - visina_ekrana/4.3f)
+			if ((colision_rect.Y > (visina_ekrana - visina_ekrana/4.35f)) || (colision_rect.Y < 0))
 			{
-				rectangle.Y -=(int) (Velocity.Y * 2.5f);
+				rectangle.Y -=(int)(Velocity.Y * 2.5f);
 				Velocity.Y = -Velocity.Y * 0.65f;
 			}
-			if (rectangle.Y < -rectangle.Height/2)
-			{
-				rectangle.Y -= (int)(Velocity.Y * 2.5f);
-				Velocity.Y = -Velocity.Y * 0.65f;
-			}
-
-			if ((rectangle.X < -5 && Velocity.X < 0) || rectangle.X>duljina-rectangle.Width && Velocity.X>0)
+			if ((colision_rect.X < -5 && Velocity.X < 0) || colision_rect.X>duljina-colision_rect.Width && Velocity.X>0)
 				Velocity.X = 0;
 
 
@@ -194,7 +188,7 @@ namespace Tica_Android_2
 			stit = false;
 			playerAnimation.Image = tex;
 			playerAnimation.origin = new Vector2 (tex.Width / 10, tex.Height / 6);
-			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.9f), (int)(rectangle.Height * 0.8f));
+			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.9f), (int)(rectangle.Height * 0.7f));
 
 		}
 	}

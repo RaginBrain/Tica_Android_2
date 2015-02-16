@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="Tica_Android_2\Tica_Android_2.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.HVGA_slider_320x480_mdpi" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.WVGA_480x800_mdpi" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Tica_Android_2\Game1.cs">
     <Files>
-      <File FileName="Tica_Android_2\Game1.cs" Line="29" Column="29" />
-      <File FileName="Tica_Android_2\Animation.cs" Line="3" Column="3" />
+      <File FileName="Tica_Android_2\Game1.cs" Line="54" Column="54" />
+      <File FileName="Tica_Android_2\Animation.cs" Line="1" Column="1" />
       <File FileName="Tica_Android_2\Background.cs" Line="21" Column="21" />
-      <File FileName="Tica_Android_2\Barijera.cs" Line="58" Column="58" />
+      <File FileName="Tica_Android_2\Barijera.cs" Line="1" Column="1" />
       <File FileName="Tica_Android_2\Activity1.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

@@ -14,18 +14,23 @@ namespace Tica_Android_2
 	class Stit : Sprite
 	{
 
-		public void Update(Player igrac, int broj, LevelUp lvl)
+		public void Update(Player igrac, int broj, LevelUp lvl, float speed_scale)
 		{
-			rectangle.X -= brzina_kretanja+1;
+			speed_buffer += brzina_kretanja*speed_scale;
+			if (speed_buffer > 1) {
+				rectangle.X -=(int)speed_buffer;
+				speed_buffer-=(float)((int)speed_buffer);
+			}
+
 			if (rectangle.Intersects(igrac.colision_rect))
 			{
 				igrac.stit = true;
-				rectangle.Y = 1000;
+				rectangle.Y = (int)(1000*speed_scale);
 			}
 
-			if ((rectangle.X < -50) && igrac.stit==false)
+			if ((rectangle.X < (-50*speed_scale)) && igrac.stit==false)
 			{
-				rectangle.X = 2000 + (int)(lvl.bonus * 1.8);
+				rectangle.X = (int)((2000 + (int)(lvl.bonus * 1.8))*speed_scale);
 				rectangle.Y = broj;
 			}
 		}
@@ -34,6 +39,7 @@ namespace Tica_Android_2
 			texture = tex;
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
+			speed_buffer = 0;
 
 		}
 
@@ -43,18 +49,22 @@ namespace Tica_Android_2
 
 		public int level;
 		public int bonus;
-		public void Update(Player igrac, int broj, ref int udaljenost_barijera)
+		public void Update(Player igrac, int broj, ref int udaljenost_barijera,float speed_scale)
 		{
-			rectangle.X -= brzina_kretanja;
+			speed_buffer += brzina_kretanja*speed_scale;
+			if (speed_buffer > 1) {
+				rectangle.X -=(int)speed_buffer;
+				speed_buffer-=(float)((int)speed_buffer);
+			}
 
 
-			if (rectangle.X < -50)
+			if (rectangle.X < (-50*speed_scale))
 			{
-				rectangle.X =1500+bonus;
+				rectangle.X =(int)((1500+bonus)*speed_scale);
 				bonus += (int)(bonus*1.7);
 				rectangle.Y = broj;
 				level += 1;
-				udaljenost_barijera = 300;
+				udaljenost_barijera = (int)(300*speed_scale);
 
 			}
 		}
@@ -64,18 +74,24 @@ namespace Tica_Android_2
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
 			level = 1;
-			bonus = 400;
+			bonus = (int)(400*resize_scale);
+			speed_buffer = 0;
 		}
 	}
 	class Barijera : Sprite
 	{
 		protected Random r = new Random();
 
-		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista)
+		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale)
 		{
 
 
-			rectangle.X -= brzina_kretanja;
+			speed_buffer += brzina_kretanja*speed_scale;
+			if (speed_buffer > 1) {
+				rectangle.X -=(int)speed_buffer;
+				speed_buffer-=(float)((int)speed_buffer);
+			}
+
 			if (Dodir (igrac))
 			if (igrac.stit == true) {
 				rectangle.Y = 2 * visina;
@@ -87,7 +103,7 @@ namespace Tica_Android_2
 
 
 
-			if (rectangle.X < -50)
+			if (rectangle.X < (-50*speed_scale))
 			{
 				rectangle.X = lista[lista.Count-1].rectangle.X+dodatak;
 				int visina_zadnje = lista [lista.Count - 1].rectangle.Y;
@@ -106,6 +122,8 @@ namespace Tica_Android_2
 			texture = tex;
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja =(int) 3;
+			speed_buffer = 0;
+
 		}
 		public Barijera()
 		{
@@ -137,12 +155,12 @@ namespace Tica_Android_2
 
 		}
 
-		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista)
+		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale)
 		{
-			base.Update (igrac,ref dodatak,visina,sirina,lista);
+			base.Update (igrac,ref dodatak,visina,sirina,lista,speed_scale);
 			if (rectangle.X < -20)
 			{
-				brzina_gibanja = r.Next(1, 3);
+				brzina_gibanja = r.Next(1, 4);
 			}
 			if (rectangle.Y > visina- visina/3)
 				gori=true;

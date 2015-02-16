@@ -179,11 +179,11 @@ namespace Tica_Android_2
 
 
 			start_button = new Sprite ();
-			start_button.rectangle = new Rectangle (0, 0, 500, 238);
+			start_button.rectangle = new Rectangle (0, 0, (int)(500*scale),(int)(238*scale));
 			start_button.texture = Content.Load<Texture2D> ("oblak_start");
 
 			game_over = new Sprite ();
-			game_over.rectangle = new Rectangle (-visina, 0, 300, 409);
+			game_over.rectangle = new Rectangle (-visina, 0, (int)(300*scale), (int)(409*scale));
 			game_over.texture=Content.Load<Texture2D>("game_over");
 
 
@@ -191,7 +191,7 @@ namespace Tica_Android_2
 			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64),scale);
 			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, 250,150, 50),scale);
 
-			udaljenost_barijera = 300;
+			udaljenost_barijera = (int)(300*scale);
 
 			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1000, 0, 35, 100),scale);
 			red_prepreka.Add (barijera);
@@ -207,7 +207,7 @@ namespace Tica_Android_2
 			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80),scale);
 			red_prepreka.Add (pila);
 			pila_origin = new Vector2 (pila.texture.Width/ 2, pila.texture.Height/ 2);
-			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width))*scale;
+			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width));
 			//--------------------
 			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100),scale);
 			red_prepreka.Add (barijera2);
@@ -274,13 +274,13 @@ namespace Tica_Android_2
 
 				rezultat.Update (player1.score);
 
-				stit.Update (player1, 350, lvlUp);
+				stit.Update (player1, (int)(350*scale), lvlUp,scale);
 				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth,scale);
 
-				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
-				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
+				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
+				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
 
-				pila.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka);
+				pila.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
 				rotacija_pile += 0.1f;
 				if (rotacija_pile > 10)
 					rotacija_pile = 0;
@@ -291,11 +291,11 @@ namespace Tica_Android_2
 				//triba uštimat s velicinom sprite-a
 				///////////////////////////////////////
 
-				barijera.Update (player1,ref udaljenost_barijera, visina, sirina,red_prepreka);
-				barijera1.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
-				barijera2.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
-				barijera3.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka);
-				lvlUp.Update (player1, 300,ref udaljenost_barijera);
+				barijera.Update (player1,ref udaljenost_barijera, visina, sirina,red_prepreka,scale);
+				barijera1.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
+				barijera2.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
+				barijera3.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
+				lvlUp.Update (player1, (int)(300*scale), ref udaljenost_barijera, scale);
 
 				if (sljedeciLevel == lvlUp.level)
 					LelevUp ();
@@ -367,7 +367,7 @@ namespace Tica_Android_2
 				scrolling2.Draw (spriteBatch);
 				spriteBatch.Draw (start_button.texture, start_button.rectangle, Color.White);
 				try{
-					rezultat.Draw (spriteBatch, sirina/2,visina-visina/3, 30, 80);
+					rezultat.Draw (spriteBatch, sirina/2,visina-visina/3,(int)(30*scale), (int)(80*scale));
 				}
 				catch{}
 				spriteBatch.End ();
@@ -385,7 +385,7 @@ namespace Tica_Android_2
 					lvlUp.Draw (spriteBatch);
 
 					try{
-						rezultat.Draw (spriteBatch, 5, 5, 15, 40);
+						rezultat.Draw (spriteBatch, 5, 5, (int)(15*scale), (int)(40*scale));
 					}
 					catch{}
 					//spriteBatch.Draw(jst.texture,jst.rectangle,Color.White);
@@ -400,7 +400,7 @@ namespace Tica_Android_2
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
 					// stit.Draw(spriteBatch);
 					spriteBatch.Draw (txx, pila.rectangle, Color.White);
-					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale+0.1f, SpriteEffects.None, 0);
+					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale, SpriteEffects.None, 0);
 
 
 					spriteBatch.Draw (
