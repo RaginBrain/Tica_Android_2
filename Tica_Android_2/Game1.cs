@@ -210,8 +210,6 @@ namespace Tica_Android_2
 			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80),scale);
 			red_prepreka.Add (pila);
 
-			pila_origin = new Vector2 (pila.texture.Width/ 2, pila.texture.Height/ 2);
-			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width));
 
 			//--------------------
 			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100),scale);
@@ -222,8 +220,23 @@ namespace Tica_Android_2
 			red_prepreka.Add (maca);
 
 
-			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width));
+			pila_origin = new Vector2 (pila.texture.Width/ 2, pila.texture.Height/ 2);
+			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width))*1.3f;
+
+			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width))*1.3f;
 			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
+
+			/*if (maca_scale < 0.5)
+				maca_scale += (1 - maca_scale) * 0.2f;
+			else
+				maca_scale+=0.2f;
+
+			if (pila_scale < 0.5)
+				pila_scale += (1 - pila_scale) * 0.2f;
+			else
+				pila_scale+=0.2f;*/
+
+
 		}
 
 		/// <summary>
@@ -405,8 +418,8 @@ namespace Tica_Android_2
 					barijera3.Draw (spriteBatch);
 
 
-					spriteBatch.Draw (maca.texture, new Vector2(maca.rectangle.X+(int)(maca.rectangle.Width/2),maca.rectangle.Y+(int)(maca.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale+0.20f, SpriteEffects.None, 0);
-					spriteBatch.Draw (maca2.texture, new Vector2(maca2.rectangle.X+(int)(maca2.rectangle.Width/2),maca2.rectangle.Y+(int)(maca2.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale+0.20f, SpriteEffects.None, 0);
+					spriteBatch.Draw (maca.texture, new Vector2(maca.rectangle.X+(int)(maca.rectangle.Width/2),maca.rectangle.Y+(int)(maca.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale, SpriteEffects.None, 0);
+					spriteBatch.Draw (maca2.texture, new Vector2(maca2.rectangle.X+(int)(maca2.rectangle.Width/2),maca2.rectangle.Y+(int)(maca2.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale, SpriteEffects.None, 0);
 					//maca.Draw (spriteBatch);
 					//maca2.Draw (spriteBatch);
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
@@ -414,7 +427,7 @@ namespace Tica_Android_2
 					spriteBatch.Draw (txx, pila.rectangle, Color.White);
 					spriteBatch.Draw (txx, maca.rectangle, Color.White);
 
-					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, (pila_scale)+0.15f, SpriteEffects.None, 0);
+					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, (pila_scale), SpriteEffects.None, 0);
 
 
 					spriteBatch.Draw (
