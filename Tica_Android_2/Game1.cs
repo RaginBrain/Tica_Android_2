@@ -20,6 +20,9 @@ namespace Tica_Android_2
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{	
+		float maca_scale;
+		Vector2 maca_origin;
+
 		float scale;
 		string qualifier;
 		float screenratio;
@@ -95,7 +98,7 @@ namespace Tica_Android_2
 			sirina = graphics.PreferredBackBufferWidth;
 			visina = graphics.PreferredBackBufferHeight;
 
-			scale = ((float)(((float)visina / 480f) + ((float)sirina / 800f)) / 2f)-0.1f;
+			scale = ((float)(((float)visina / 480f) + ((float)sirina / 800f)) / 2f);
 			Content.RootDirectory = "Content";
 		}
 
@@ -154,7 +157,7 @@ namespace Tica_Android_2
 			scrolling1 = new Scrolling(Content.Load<Texture2D>("bg1"), new Rectangle(0, 0, sirina, visina), 3);
 			scrolling2 = new Scrolling(Content.Load<Texture2D>("bg2"), new Rectangle(sirina, 0,sirina, visina), 3);
 
-			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0,50, 40),scale);
+			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0,50, 50),scale);
 
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
 
@@ -206,8 +209,10 @@ namespace Tica_Android_2
 			//pila----------------
 			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80),scale);
 			red_prepreka.Add (pila);
+
 			pila_origin = new Vector2 (pila.texture.Width/ 2, pila.texture.Height/ 2);
 			pila_scale = ((float)(pila.rectangle.Width) / (float)(pila.texture.Width));
+
 			//--------------------
 			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100),scale);
 			red_prepreka.Add (barijera2);
@@ -216,6 +221,9 @@ namespace Tica_Android_2
 			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[5].rectangle.X+udaljenost_barijera,200,  80,  80),scale);
 			red_prepreka.Add (maca);
 
+
+			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width));
+			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
 		}
 
 		/// <summary>
@@ -395,17 +403,23 @@ namespace Tica_Android_2
 					barijera1.Draw (spriteBatch);
 					barijera2.Draw (spriteBatch);
 					barijera3.Draw (spriteBatch);
-					maca.Draw (spriteBatch);
-					maca2.Draw (spriteBatch);
+
+
+					spriteBatch.Draw (maca.texture, new Vector2(maca.rectangle.X+(int)(maca.rectangle.Width/2),maca.rectangle.Y+(int)(maca.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale+0.20f, SpriteEffects.None, 0);
+					spriteBatch.Draw (maca2.texture, new Vector2(maca2.rectangle.X+(int)(maca2.rectangle.Width/2),maca2.rectangle.Y+(int)(maca2.rectangle.Height/2)), null, Color.White, 0, maca_origin,maca_scale+0.20f, SpriteEffects.None, 0);
+					//maca.Draw (spriteBatch);
+					//maca2.Draw (spriteBatch);
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
 					// stit.Draw(spriteBatch);
 					spriteBatch.Draw (txx, pila.rectangle, Color.White);
-					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, pila_scale, SpriteEffects.None, 0);
+					spriteBatch.Draw (txx, maca.rectangle, Color.White);
+
+					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, (pila_scale)+0.15f, SpriteEffects.None, 0);
 
 
 					spriteBatch.Draw (
 						player1.texture
-						, new Vector2(player1.rectangle.X+(player1.playerAnimation.FrameWith/2),player1.rectangle.Y+(player1.playerAnimation.FrameHeight/2))
+						, new Vector2(player1.rectangle.X+(scale*player1.playerAnimation.FrameWith/2),player1.rectangle.Y+(scale*player1.playerAnimation.FrameHeight/2))
 						, player1.playerAnimation.suorceRect, Color.White, 0, player1.playerAnimation.origin,scale, SpriteEffects.None, 0
 					);
 

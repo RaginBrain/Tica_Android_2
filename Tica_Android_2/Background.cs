@@ -147,8 +147,8 @@ namespace Tica_Android_2
 			rectangle.X += (int)(Math.Round(Velocity.X) );
 			rectangle.Y += (int)(Math.Round(Velocity.Y));
 
-			colision_rect.X = rectangle.X + (int)(playerAnimation.FrameWith/3.5f);
-			colision_rect.Y = rectangle.Y + (int)(playerAnimation.FrameHeight/2.5f);
+			colision_rect.X = rectangle.X + (int)(resize_scale* playerAnimation.FrameWith/3.5f);
+			colision_rect.Y = rectangle.Y + (int)(resize_scale* playerAnimation.FrameHeight/2.75f);
 			//skroz je labav uvijet jer ovisi o texturi!!!
 
 			//kretanje zavrsava ovdje ***************************************************
@@ -188,7 +188,7 @@ namespace Tica_Android_2
 			stit = false;
 			playerAnimation.Image = tex;
 			playerAnimation.origin = new Vector2 (tex.Width / 10, tex.Height / 6);
-			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.9f), (int)(rectangle.Height * 0.7f));
+			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.8f), (int)(rectangle.Height * 0.6f));
 
 		}
 	}
