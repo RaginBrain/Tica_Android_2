@@ -189,17 +189,17 @@ namespace Tica_Android_2
 			game_over.rectangle = new Rectangle (-visina, 0, (int)(300*scale), (int)(409*scale));
 			game_over.texture=Content.Load<Texture2D>("game_over");
 
+			udaljenost_barijera = (int)(300*scale);
 
 
 			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64),scale);
-			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, 250,150, 50),scale);
+			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, (int)(visina-(55*scale)), 150, 50),scale);
 
-			udaljenost_barijera = (int)(300*scale);
 
-			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(1000, 0, 35, 100),scale);
+			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(udaljenost_barijera*3, 0, 35, 100),scale);
 			red_prepreka.Add (barijera);
 
-			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera,250,  80,  80),scale);
+			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera, 250,  80,  80),scale);
 			red_prepreka.Add (maca2);
 
 			barijera1 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"),
@@ -226,15 +226,6 @@ namespace Tica_Android_2
 			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width))*1.3f;
 			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
 
-			/*if (maca_scale < 0.5)
-				maca_scale += (1 - maca_scale) * 0.2f;
-			else
-				maca_scale+=0.2f;
-
-			if (pila_scale < 0.5)
-				pila_scale += (1 - pila_scale) * 0.2f;
-			else
-				pila_scale+=0.2f;*/
 
 
 		}

@@ -37,7 +37,7 @@ namespace Tica_Android_2
 		public Stit(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			rectangle =  new Rectangle((int)(rect.X*resize_scale),(int)(rect.Y*resize_scale), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
 			speed_buffer = 0;
 
@@ -62,7 +62,6 @@ namespace Tica_Android_2
 			{
 				rectangle.X =(int)((1500+bonus)*speed_scale);
 				bonus += (int)(bonus*1.7);
-				rectangle.Y = broj;
 				level += 1;
 				udaljenost_barijera = (int)(300*speed_scale);
 
@@ -71,7 +70,7 @@ namespace Tica_Android_2
 		public LevelUp(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			rectangle =  new Rectangle((int)(resize_scale*rect.X), rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = (int)3;
 			level = 1;
 			bonus = (int)(400*resize_scale);
@@ -114,13 +113,13 @@ namespace Tica_Android_2
 
 				lista.RemoveAt (0);
 				lista.Add (this);
-				dodatak = (int)(dodatak * 0.96f);
+				dodatak = (int)(dodatak * 0.97f);
 			}
 		}
 		public Barijera(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
-			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			rectangle =  new Rectangle(rect.X, (int)(resize_scale*rect.Y), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja =(int) 3;
 			speed_buffer = 0;
 
