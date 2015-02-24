@@ -65,6 +65,8 @@
     <Compile Include="Animation.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Barijera.cs" />
+    <Compile Include="Coin.cs" />
+    <Compile Include="CoinWizzard.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Icon.png" />
@@ -76,8 +78,6 @@
     <AndroidAsset Include="Assets\AboutAssets.txt" />
     <AndroidAsset Include="Assets\Content\barijera.png" />
     <AndroidAsset Include="Assets\Content\be_ready.png" />
-    <AndroidAsset Include="Assets\Content\bg1.gif" />
-    <AndroidAsset Include="Assets\Content\bg2.gif" />
     <AndroidAsset Include="Assets\Content\game_over.png" />
     <AndroidAsset Include="Assets\Content\maca.png" />
     <AndroidAsset Include="Assets\Content\oblak_start.png" />
@@ -96,9 +96,15 @@
     <AndroidAsset Include="Assets\Content\Znamenke\9.png" />
     <AndroidAsset Include="Assets\Content\pila.png" />
     <AndroidAsset Include="Assets\Content\kocka.jpg" />
+    <AndroidAsset Include="Assets\Content\kruna.png" />
+    <AndroidAsset Include="Assets\Content\Zvukovi\BubblePop.mp3" />
+    <AndroidAsset Include="Assets\Content\bg1.png" />
+    <AndroidAsset Include="Assets\Content\bg2.png" />
+    <AndroidAsset Include="Assets\Content\coin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Assets\Content\Znamenke\" />
+    <Folder Include="Assets\Content\Zvukovi\" />
   </ItemGroup>
 </Project>

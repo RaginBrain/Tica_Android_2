@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 #endregion
 
@@ -20,13 +22,19 @@ namespace Tica_Android_2
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{	
+		Coin test_coin;
+
+		Song stit_out;
+		Texture2D kruna;
 		float maca_scale;
 		Vector2 maca_origin;
+		Texture2D coin_texture;
 
 		float scale;
 		string qualifier;
 		float screenratio;
 		Texture2D txx;
+		Texture2D player_textura;
 
 
 		enum GameState { Start, InGame, GameOver };
@@ -34,16 +42,16 @@ namespace Tica_Android_2
 
 		public void LelevUp()
 		{
-			scrolling1.brzina_kretanja += 1;
-			scrolling2.brzina_kretanja += 1;
-			barijera1.brzina_kretanja += 1;
-			barijera2.brzina_kretanja += 1;
-			barijera3.brzina_kretanja += 1;
-			barijera.brzina_kretanja += 1;
-			player1.speed += 1;
+			scrolling1.brzina_kretanja += 0.8f;
+			scrolling2.brzina_kretanja += 0.8f;
+			barijera1.brzina_kretanja += 0.8f;
+			barijera2.brzina_kretanja += 0.8f;
+			barijera3.brzina_kretanja += 0.8f;
+			barijera.brzina_kretanja += 0.8f;
+			player1.speed += (1f*scale);
 			sljedeciLevel += 1;
-			maca.brzina_kretanja += 1;
-			maca2.brzina_kretanja += 1;
+			maca.brzina_kretanja += 0.8f;
+			maca2.brzina_kretanja += 0.8f;
 			pila.brzina_kretanja = maca.brzina_kretanja + 1;
 
 		}
@@ -128,6 +136,7 @@ namespace Tica_Android_2
 
 
 
+
 			//gamesave
 			if (savegameStorage.FileExists("high_score.txt")) 
 			{
@@ -158,10 +167,13 @@ namespace Tica_Android_2
 			scrolling2 = new Scrolling(Content.Load<Texture2D>("bg2"), new Rectangle(sirina, 0,sirina, visina), 3);
 
 			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(0, 0,50, 50),scale);
+			player_textura = player1.texture;
 
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
 
-
+			test_coin= new Coin(Content.Load<Texture2D>("coin"),new Rectangle(500,0,33,30),scale);
+			kruna=Content.Load<Texture2D>("kruna");
+			coin_texture = Content.Load<Texture2D> ("coin");
 
 			//dodavanje znamenaka
 			lista_txtr = new List<Texture2D> ();
@@ -179,10 +191,8 @@ namespace Tica_Android_2
 			rezultat = new Score (lista_txtr);
 
 
-
-
 			start_button = new Sprite ();
-			start_button.rectangle = new Rectangle (0, 0, (int)(500*scale),(int)(238*scale));
+			start_button.rectangle = new Rectangle (0, 0, (int)(400*scale),(int)(210*scale));
 			start_button.texture = Content.Load<Texture2D> ("oblak_start");
 
 			game_over = new Sprite ();
@@ -227,6 +237,8 @@ namespace Tica_Android_2
 			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
 
 
+			//ZVUKOVI
+			stit_out = Content.Load<Song> ("Zvukovi/BubblePop");
 
 		}
 
@@ -267,6 +279,7 @@ namespace Tica_Android_2
 
 						if (tl.State == TouchLocationState.Pressed && start_button.rectangle.Intersects (pozicija_dodira))
 							currentGameState = GameState.InGame;
+					
 					}
 
 				}
@@ -283,16 +296,16 @@ namespace Tica_Android_2
 				//******************************************************************************
 
 
-
+				test_coin.Update (player1, scale, gameTime,sirina);
 				rezultat.Update (player1.score);
 
 				stit.Update (player1, (int)(350*scale), lvlUp,scale);
 				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth,scale);
 
-				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
-				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
+				maca2.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale,stit_out);
+				maca.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale,stit_out);
 
-				pila.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale);
+				pila.Update (player1, ref udaljenost_barijera, visina, sirina * 3, red_prepreka,scale,stit_out);
 				rotacija_pile += 0.1f;
 				if (rotacija_pile > 10)
 					rotacija_pile = 0;
@@ -303,10 +316,10 @@ namespace Tica_Android_2
 				//triba uštimat s velicinom sprite-a
 				///////////////////////////////////////
 
-				barijera.Update (player1,ref udaljenost_barijera, visina, sirina,red_prepreka,scale);
-				barijera1.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
-				barijera2.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
-				barijera3.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale);
+				barijera.Update (player1,ref udaljenost_barijera, visina, sirina,red_prepreka,scale,stit_out);
+				barijera1.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale,stit_out);
+				barijera2.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale,stit_out);
+				barijera3.Update (player1,ref udaljenost_barijera,  visina, sirina,red_prepreka,scale,stit_out);
 				lvlUp.Update (player1, (int)(300*scale), ref udaljenost_barijera, scale);
 
 				if (sljedeciLevel == lvlUp.level)
@@ -319,9 +332,9 @@ namespace Tica_Android_2
 
 
 				if (player1.stit)
-					player1.playerAnimation.Image = player1.texture_stit;
+					player_textura=player1.texture_stit;
 				else
-					player1.playerAnimation.Image = player1.texture;
+					player_textura = player1.texture;
 				if (player1.alive == false) {
 					currentGameState = GameState.GameOver;
 				}
@@ -378,6 +391,7 @@ namespace Tica_Android_2
 				scrolling1.Draw (spriteBatch);
 				scrolling2.Draw (spriteBatch);
 				spriteBatch.Draw (start_button.texture, start_button.rectangle, Color.White);
+				spriteBatch.Draw(kruna,new Rectangle((sirina/2),((visina-visina/3)-(int)(65*scale)),(int)(90*scale),(int)(60*scale)),Color.White);
 				try{
 					rezultat.Draw (spriteBatch, sirina/2,visina-visina/3,(int)(30*scale), (int)(80*scale));
 				}
@@ -415,19 +429,20 @@ namespace Tica_Android_2
 					//maca2.Draw (spriteBatch);
 					//spriteBatch.Draw(pila.texture,pila.rectangle, null, Color.White, rotacija_pile, pila_origin,  SpriteEffects.None, 0);
 					// stit.Draw(spriteBatch);
-					spriteBatch.Draw (txx, pila.rectangle, Color.White);
-					spriteBatch.Draw (txx, maca.rectangle, Color.White);
+					//spriteBatch.Draw (txx, pila.rectangle, Color.White);
+					//spriteBatch.Draw (txx, maca.rectangle, Color.White);
 
 					spriteBatch.Draw (pila.texture, new Vector2(pila.rectangle.X+(int)(pila.rectangle.Width/2),pila.rectangle.Y+(int)(pila.rectangle.Height/2)), null, Color.White, rotacija_pile, pila_origin, (pila_scale), SpriteEffects.None, 0);
 
 
 					spriteBatch.Draw (
-						player1.texture
+						player_textura
 						, new Vector2(player1.rectangle.X+(scale*player1.playerAnimation.FrameWith/2),player1.rectangle.Y+(scale*player1.playerAnimation.FrameHeight/2))
-						, player1.playerAnimation.suorceRect, Color.White, 0, player1.playerAnimation.origin,scale, SpriteEffects.None, 0
+						, player1.playerAnimation.suorceRect, Color.White, 0, player1.playerAnimation.origin,scale*0.96f, SpriteEffects.None, 0
 					);
 
-					spriteBatch.Draw (txx, player1.colision_rect, Color.White);
+					test_coin.Draw (spriteBatch,scale);
+					//spriteBatch.Draw (txx, player1.colision_rect, Color.White);
 
 					//player1.playerAnimation.Draw (spriteBatch);
 				

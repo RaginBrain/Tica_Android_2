@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Tica_Android_2
 {
@@ -16,6 +18,7 @@ namespace Tica_Android_2
 
 		public void Update(Player igrac, int broj, LevelUp lvl, float speed_scale)
 		{
+
 			speed_buffer += brzina_kretanja*speed_scale;
 			if (speed_buffer > 1) {
 				rectangle.X -=(int)speed_buffer;
@@ -24,13 +27,17 @@ namespace Tica_Android_2
 
 			if (rectangle.Intersects(igrac.colision_rect))
 			{
+				if (igrac.stit == true)
+					igrac.score += 500;
 				igrac.stit = true;
+				igrac.colision_rect = new Rectangle (igrac.colision_rect.X, igrac.colision_rect.Y, (int)(igrac.rectangle.Width * 0.9f), (int)(igrac.rectangle.Height * 0.8f));
 				rectangle.Y = (int)(1000*speed_scale);
 			}
 
-			if ((rectangle.X < (-50*speed_scale)) && igrac.stit==false)
+			if (rectangle.X < (-50*speed_scale))
 			{
-				rectangle.X = (int)((2000 + (int)(lvl.bonus * 1.8))*speed_scale);
+
+				rectangle.X = (int)((1500*speed_scale + (int)(lvl.bonus * 1.8))*speed_scale);
 				rectangle.Y = broj;
 			}
 		}
@@ -61,10 +68,9 @@ namespace Tica_Android_2
 			if (rectangle.X < (-50*speed_scale))
 			{
 				rectangle.X =(int)((1500+bonus)*speed_scale);
-				bonus += (int)(bonus*1.7);
+				bonus += (int)(bonus*1.6);
 				level += 1;
-				udaljenost_barijera = (int)(300*speed_scale);
-
+				udaljenost_barijera = (int)(300*speed_scale)+(int)(15*level*speed_scale);
 			}
 		}
 		public LevelUp(Texture2D tex, Rectangle rect,float resize_scale)
@@ -81,7 +87,8 @@ namespace Tica_Android_2
 	{
 		protected Random r = new Random();
 
-		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale)
+
+		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off)
 		{
 
 
@@ -93,9 +100,10 @@ namespace Tica_Android_2
 
 			if (Dodir (igrac))
 			if (igrac.stit == true) {
+				MediaPlayer.Play (stit_off);
 				rectangle.Y = 2 * visina;
+				igrac.colision_rect = new Rectangle (igrac.colision_rect.X, igrac.colision_rect.Y, (int)(igrac.rectangle.Width * 0.8f), (int)(igrac.rectangle.Height * 0.6f));
 				igrac.stit = false;
-
 			}
 			else
 				igrac.alive = false;
@@ -104,16 +112,17 @@ namespace Tica_Android_2
 
 			if (rectangle.X < (-50*speed_scale))
 			{
+				igrac.score+=25;
 				rectangle.X = lista[lista.Count-1].rectangle.X+dodatak;
 				int visina_zadnje = lista [lista.Count - 1].rectangle.Y;
 				if (visina_zadnje > visina / 2)
-					rectangle.Y = r.Next (0, (int)(visina/2));
+					rectangle.Y = r.Next (0, (int)(visina/2)-rectangle.Height);
 				else
-					rectangle.Y = r.Next ((int)(visina/2), visina-visina/5);
+					rectangle.Y = r.Next ((int)(visina/2), (int)(visina-visina/4.7f));
 
 				lista.RemoveAt (0);
 				lista.Add (this);
-				dodatak = (int)(dodatak * 0.97f);
+				dodatak = (int)(dodatak * 0.985f);
 			}
 		}
 		public Barijera(Texture2D tex, Rectangle rect,float resize_scale)
@@ -139,7 +148,7 @@ namespace Tica_Android_2
 
 	class PokretnaBarijera : Barijera
 	{
-
+		float buffer2;
 		int visina;
 		public bool gori;
 		public int brzina_gibanja;
@@ -149,27 +158,35 @@ namespace Tica_Android_2
 			texture = tex;
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = 3;
+			buffer2 = 0;
 			brzina_gibanja = r.Next(1, 4);
 			visina = vis;
 
 		}
 
-		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale)
+		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off)
 		{
-			base.Update (igrac,ref dodatak,visina,sirina,lista,speed_scale);
+			base.Update (igrac,ref dodatak,visina,sirina,lista,speed_scale,stit_off);
 			if (rectangle.X < -20)
 			{
-				brzina_gibanja = r.Next(1, 4);
+				brzina_gibanja = r.Next(0,3);
 			}
 			if (rectangle.Y > visina- visina/3)
 				gori=true;
 			if (rectangle.Y < 0)
 				gori = false;
 
-			if (gori)
-				rectangle.Y -= brzina_gibanja;
-			else
-				rectangle.Y += brzina_gibanja;
+			buffer2 += brzina_gibanja*speed_scale;
+			if (buffer2 > 1) 
+			{
+				if (gori)
+					rectangle.Y-=(int)buffer2;
+				else
+					rectangle.Y += (int)buffer2;
+				buffer2-=(float)((int)buffer2);
+
+			}
+
 		}
 	}
 }

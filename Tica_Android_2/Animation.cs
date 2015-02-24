@@ -11,6 +11,10 @@ namespace Tica_Android_2
 	{
 		public int frameCounter;
 		public int switchFrame;
+		public int broj_framova_sirina;
+		public int broj_framova_visina;
+
+		public int brzina_animacije;
 
 		public Vector2 position;
 		Vector2 currentFrame;
@@ -33,12 +37,12 @@ namespace Tica_Android_2
 
 		public int FrameWith
 		{
-			get { return Image.Width / 5; }
+			get { return Image.Width / broj_framova_sirina; }
 		}
 
 		public int FrameHeight
 		{
-			get { return Image.Height / 3; }
+			get { return Image.Height / broj_framova_visina; }
 		}
 
 
@@ -55,18 +59,18 @@ namespace Tica_Android_2
 		public void Update(GameTime gameTime)
 		{
 			if (active)
-				frameCounter += 7*(int)gameTime.ElapsedGameTime.TotalMilliseconds;
+				frameCounter += brzina_animacije*(int)gameTime.ElapsedGameTime.TotalMilliseconds;
 			else
 				frameCounter = 0;
 			//uvjeti za pribacivanje
 			if (frameCounter >= switchFrame)
 			{
 				frameCounter = 0;
-				currentFrame.X += Image.Width/5;
+				currentFrame.X += Image.Width/broj_framova_sirina;
 				if (currentFrame.X >= Image.Width)
 				{
 					currentFrame.X =0;
-					currentFrame.Y +=Image.Height/3;
+					currentFrame.Y +=Image.Height/broj_framova_visina;
 				}
 				if (currentFrame.Y >= Image.Height)
 					currentFrame.Y = 0;
