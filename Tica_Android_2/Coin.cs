@@ -34,7 +34,7 @@ namespace Tica_Android_2
 				if (!(rectangle.X > (30 * speed_scale)) && !(rectangle.Y > (80 * speed_scale)))
 					animacija.active = false;
 			}
-			//speed_buffer += brzina_kretanja*speed_scale;
+			speed_buffer += brzina_kretanja*speed_scale;
 			if (speed_buffer > 1) {
 				rectangle.X -=(int)speed_buffer;
 				speed_buffer-=(float)((int)speed_buffer);
@@ -61,6 +61,7 @@ namespace Tica_Android_2
 			vrijednost = 10;
 			pokupljen = false;
 
+			animacija.active = true;
 			animacija.brzina_animacije = 6;
 			animacija.broj_framova_sirina = 10;
 			animacija.broj_framova_visina = 1;

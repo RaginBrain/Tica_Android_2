@@ -22,13 +22,16 @@ namespace Tica_Android_2
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{	
-		Coin test_coin;
+		public CoinWizzard CoinWizz;
+		List<Coin> test_lista_coina;
+		//Coin test_coin;
 
 		Song stit_out;
 		Texture2D kruna;
 		float maca_scale;
 		Vector2 maca_origin;
 		Texture2D coin_texture;
+
 
 		float scale;
 		string qualifier;
@@ -171,9 +174,9 @@ namespace Tica_Android_2
 
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
 
-			test_coin= new Coin(Content.Load<Texture2D>("coin"),new Rectangle(500,0,33,30),scale);
-			kruna=Content.Load<Texture2D>("kruna");
-			coin_texture = Content.Load<Texture2D> ("coin");
+
+
+
 
 			//dodavanje znamenaka
 			lista_txtr = new List<Texture2D> ();
@@ -236,7 +239,12 @@ namespace Tica_Android_2
 			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width))*1.3f;
 			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
 
+			CoinWizz = new CoinWizzard ();
+			coin_texture = Content.Load<Texture2D> ("coin");
+			//test_coin= new Coin(Content.Load<Texture2D>("coin"),new Rectangle(500,0,33,30),scale);
+			test_lista_coina = CoinWizz.Ubaci_Coine (red_prepreka, visina, coin_texture, scale);
 
+			kruna=Content.Load<Texture2D>("kruna");
 			//ZVUKOVI
 			stit_out = Content.Load<Song> ("Zvukovi/BubblePop");
 
@@ -296,7 +304,12 @@ namespace Tica_Android_2
 				//******************************************************************************
 
 
-				test_coin.Update (player1, scale, gameTime,sirina);
+				//test_coin.Update (player1, scale, gameTime, sirina);
+				foreach (Coin x in test_lista_coina) 
+				{
+					x.Update (player1, scale, gameTime, sirina);
+				}
+
 				rezultat.Update (player1.score);
 
 				stit.Update (player1, (int)(350*scale), lvlUp,scale);
@@ -441,7 +454,11 @@ namespace Tica_Android_2
 						, player1.playerAnimation.suorceRect, Color.White, 0, player1.playerAnimation.origin,scale*0.96f, SpriteEffects.None, 0
 					);
 
-					test_coin.Draw (spriteBatch,scale);
+					//test_coin.Draw (spriteBatch,scale);
+					foreach (Coin x in test_lista_coina) 
+					{
+						x.Draw (spriteBatch, scale);
+					}
 					//spriteBatch.Draw (txx, player1.colision_rect, Color.White);
 
 					//player1.playerAnimation.Draw (spriteBatch);

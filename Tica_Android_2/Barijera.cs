@@ -83,10 +83,10 @@ namespace Tica_Android_2
 			speed_buffer = 0;
 		}
 	}
-	class Barijera : Sprite
+	public class Barijera : Sprite
 	{
 		protected Random r = new Random();
-
+		public bool coiniziran;
 
 		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off)
 		{
@@ -128,6 +128,7 @@ namespace Tica_Android_2
 		public Barijera(Texture2D tex, Rectangle rect,float resize_scale)
 		{
 			texture = tex;
+			coiniziran = false;
 			rectangle =  new Rectangle(rect.X, (int)(resize_scale*rect.Y), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja =(int) 3;
 			speed_buffer = 0;

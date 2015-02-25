@@ -1,13 +1,13 @@
 ﻿<Properties StartupItem="Tica_Android_2\Tica_Android_2.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.480x800_hdpi_3.7inch" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Tica_Android_2\Barijera.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Tica_Android_2\Coin.cs">
     <Files>
-      <File FileName="Tica_Android_2\Coin.cs" Line="27" Column="27" />
-      <File FileName="Tica_Android_2\Barijera.cs" Line="37" Column="37" />
+      <File FileName="Tica_Android_2\Coin.cs" Line="4" Column="4" />
+      <File FileName="Tica_Android_2\Barijera.cs" Line="1" Column="1" />
+      <File FileName="Tica_Android_2\Game1.cs" Line="12" Column="12" />
       <File FileName="Tica_Android_2\Animation.cs" Line="1" Column="1" NotebookId="1" />
       <File FileName="Tica_Android_2\Background.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Tica_Android_2\Game1.cs" Line="5" Column="5" NotebookId="1" />
-      <File FileName="Tica_Android_2\CoinWizzard.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Tica_Android_2\CoinWizzard.cs" Line="33" Column="33" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
