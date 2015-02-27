@@ -87,8 +87,8 @@ namespace Tica_Android_2
 	{
 		protected Random r = new Random();
 		public bool coiniziran;
-
-		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off)
+		public Texture2D coin_txt;
+		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off,List<Coin> lista_c)
 		{
 
 
@@ -123,11 +123,13 @@ namespace Tica_Android_2
 				lista.RemoveAt (0);
 				lista.Add (this);
 				dodatak = (int)(dodatak * 0.985f);
+				Ubaci_Coine (lista_c, visina, coin_txt, speed_scale);
 			}
 		}
-		public Barijera(Texture2D tex, Rectangle rect,float resize_scale)
+		public Barijera(Texture2D tex, Rectangle rect,float resize_scale, Texture2D coin)
 		{
 			texture = tex;
+			coin_txt = coin;
 			coiniziran = false;
 			rectangle =  new Rectangle(rect.X, (int)(resize_scale*rect.Y), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja =(int) 3;
@@ -145,6 +147,60 @@ namespace Tica_Android_2
 			else
 				return false;
 		}
+
+
+
+		//COINI
+		public void Ubaci_Coine(List<Coin> Coini, int visina,Texture2D tex, float resize_scale)
+		{	int opcija;
+			int gornji_prostor,donji_prostor;
+
+			opcija = r.Next (1,99);
+			if (coiniziran==false) 
+			{
+				gornji_prostor = rectangle.Y;
+				donji_prostor = (int)((visina - (visina / 4.35)) - (rectangle.Y + rectangle.Height));
+
+			if(opcija<60)
+				Skup_Coina (Coini, donji_prostor, gornji_prostor, tex, resize_scale, visina,r.Next(1,5),r.Next(1,7));
+			else
+				Skup_Coina (Coini, donji_prostor, gornji_prostor, tex, resize_scale, visina,r.Next(2,3),r.Next(2,6));
+
+
+			}
+		}
+
+		public void Skup_Coina (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina,int redovi,int stupci)
+		{
+
+			int pocetni_Y;
+			int pocetni_X;
+			int temp_X;
+			int temp_Y;
+
+
+
+			if (donji_p < gornji_p)
+				pocetni_Y = r.Next (0, rectangle.Y - (int)(redovi*30 * resize_scale));
+			else
+				pocetni_Y=r.Next((rectangle.Y+rectangle.Height),(int)(visina - (visina / 4.35))-(int)(redovi*30 * resize_scale));
+
+			pocetni_X = (rectangle.X + rectangle.Width / 2) - (int)(5 * 33 * resize_scale);
+
+			temp_X = pocetni_X;
+			temp_Y = pocetni_Y;
+
+			for(int i=0;i<redovi;i++)
+			{
+				temp_Y=pocetni_Y+(int)(i*33*resize_scale);
+				for(int j=0;j<stupci;j++)
+				{
+					temp_X=pocetni_X+(int)(j*34*resize_scale);
+					Coini.Add (new Coin (tex, new Rectangle (temp_X, temp_Y, 33, 30), resize_scale));
+				}
+			}
+		}
+
 	}
 
 	class PokretnaBarijera : Barijera
@@ -153,21 +209,22 @@ namespace Tica_Android_2
 		int visina;
 		public bool gori;
 		public int brzina_gibanja;
-		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int vis,float resize_scale)
+		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int vis,float resize_scale,Texture2D coin)
 		{
 			gori = x;
+			coin_txt = coin;
 			texture = tex;
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = 3;
 			buffer2 = 0;
-			brzina_gibanja = r.Next(1, 4);
+			brzina_gibanja = r.Next(0, 3);
 			visina = vis;
 
 		}
 
-		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off)
+		public override void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off,List<Coin> lista_c)
 		{
-			base.Update (igrac,ref dodatak,visina,sirina,lista,speed_scale,stit_off);
+			base.Update (igrac,ref dodatak,visina,sirina,lista,speed_scale,stit_off,lista_c);
 			if (rectangle.X < -20)
 			{
 				brzina_gibanja = r.Next(0,3);

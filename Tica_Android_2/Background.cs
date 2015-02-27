@@ -25,7 +25,7 @@ namespace Tica_Android_2
 
 	}
 
-	class Scrolling : Sprite
+	public class Scrolling : Sprite
 	{
 		public Scrolling(Texture2D newTexture, Rectangle newRectangle,int brzina)
 		{
@@ -49,7 +49,7 @@ namespace Tica_Android_2
 	public  class Player : Sprite
 	{
 		public Animation playerAnimation=new Animation();
-
+		bool maknut;
 
 		public TouchCollection touchCollection;
 		public Texture2D texture_stit;
@@ -78,10 +78,22 @@ namespace Tica_Android_2
 		{
 		}
 
-		public void Update(GameTime gameTime,int visina_ekrana, int duljina,float resize_scale)
+		public void Update(GameTime gameTime,int visina_ekrana, int duljina,float resize_scale,float brzina_pozadine)
 		{
-
+			maknut = false;
 			playerAnimation.active = true;
+			float faktor_X;
+			float faktor_Y;
+
+			if ((float)udajenost_X / (150f * resize_scale) < 1)
+				faktor_X = (0.6f + (udajenost_X / (150f * resize_scale)));
+			else
+				faktor_X = 1.6f;
+
+			if ((float)udaljenost_Y / (150f * resize_scale) < 1)
+				faktor_Y = (0.6f + udaljenost_Y / (150f * resize_scale));
+			else
+				faktor_Y = 1.6f;
 
 			//kretanje sa ubrzanim gibanjem *******************************************
 			touchCollection=TouchPanel.GetState();
@@ -90,56 +102,49 @@ namespace Tica_Android_2
 			{
 
 				if ((tl.State == TouchLocationState.Pressed)
-					|| (tl.State == TouchLocationState.Moved))
-				{
+				    || (tl.State == TouchLocationState.Moved)) {
+					maknut = true;
 					centar = colision_rect.Center;
-					udaljenost_Y =(int)( Math.Abs (centar.Y - tl.Position.Y));
-					udajenost_X =(int)( Math.Abs (centar.X - tl.Position.X));
-
-
-					float faktor_X;
-					float faktor_Y;
-
-					if ((float)udajenost_X / (150f*resize_scale) < 1)
-						faktor_X = (0.6f + (udajenost_X / (150f*resize_scale)));
-					else
-						faktor_X = 1.6f;
-
-					if ((float)udaljenost_Y / (150f*resize_scale) < 1)
-						faktor_Y = (0.6f + udaljenost_Y / (150f*resize_scale));
-					else
-						faktor_Y = 1.6f;
+					udaljenost_Y = (int)(Math.Abs (centar.Y - tl.Position.Y));
+					udajenost_X = (int)(Math.Abs (centar.X - tl.Position.X));
 
 
 
-					if (tl.Position.Y < centar.Y-colision_rect.Height/2)
-					{
+
+
+
+					if (tl.Position.Y < colision_rect.Y + colision_rect.Height / 2) {
 						if (Velocity.Y > 0)
-							Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.6f*faktor_Y;
-						Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-					}
-
-					else if(tl.Position.Y>centar.Y+colision_rect.Height/2)
-					{
+							Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * faktor_Y;
+						Velocity.Y -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds*2;
+					} else if (tl.Position.Y > colision_rect.Y + colision_rect.Height / 2) {
 						if (Velocity.Y < 0)
-							Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.6f*faktor_Y;
-						Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds*faktor_Y;
+							Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds  * faktor_Y;
+						Velocity.Y += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * faktor_Y*2;
 					}
 
-					if (tl.Position.X < centar.X-colision_rect.Width/2) 
-					{
+					if (tl.Position.X < colision_rect.X + colision_rect.Width / 2) {
 						if (Velocity.X > 0)
-							Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.6f*faktor_X;
-						Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds*faktor_X;
-					}
-					else if(tl.Position.X > centar.X+colision_rect.Width/2)
-					{
+							Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds  * faktor_X;
+						Velocity.X -= speed * (float)gameTime.ElapsedGameTime.TotalSeconds * faktor_X*2;
+					} else if (tl.Position.X > colision_rect.X + colision_rect.Width / 2) {
 						if (Velocity.X < 0)
-							Velocity.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * 0.6f*faktor_X;
-						Velocity.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds*faktor_X;
+							Velocity.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * faktor_X;
+						Velocity.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds * faktor_X*2;
 					}
 				}
+			}
+			if(!maknut)
+			{
+				if (Velocity.X > 0)
+					Velocity.X -= Velocity.X / 38f;
+				if (Velocity.X < 0)
+						Velocity.X += Math.Abs(Velocity.X) /38f;
 
+				if (Velocity.Y > 0)
+					Velocity.Y -= Velocity.Y / 38f;
+				if(Velocity.Y <0)
+					Velocity.Y+= Math.Abs(Velocity.Y)/38f;
 			}
 
 
@@ -183,6 +188,7 @@ namespace Tica_Android_2
 
 		public Player(Texture2D tex,Texture2D tex_stit,Rectangle rect,float resize_scale)
 		{
+			maknut = false;
 			speed = 6*resize_scale;
 			texture = tex;
 			texture_stit = tex_stit;

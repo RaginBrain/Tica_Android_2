@@ -21,17 +21,17 @@ namespace Tica_Android_2
 		float udaljenost_x;
 		float udaljenost_y;
 
-		public void Update(Player igrac, float speed_scale, GameTime gameTime,int sirina)
+		public void Update(Player igrac, float speed_scale, GameTime gameTime,int sirina, Scrolling sc)
 		{   animacija.Update (gameTime);
 
-
+			brzina_kretanja = sc.brzina_kretanja;
 			if (pokupljen) {
-				if (rectangle.X > (30 * speed_scale))
+				if (rectangle.X >0)
 					rectangle.X -= (int)(udaljenost_x / 19);
-				if (rectangle.Y > (80 * speed_scale))
+				if (rectangle.Y > 0)
 					rectangle.Y -= (int)(udaljenost_y / 19);
 
-				if (!(rectangle.X > (30 * speed_scale)) && !(rectangle.Y > (80 * speed_scale)))
+				if (!(rectangle.X > 0) && !(rectangle.Y > 0))
 					animacija.active = false;
 			}
 			speed_buffer += brzina_kretanja*speed_scale;
@@ -42,8 +42,8 @@ namespace Tica_Android_2
 
 			if (rectangle.Intersects (igrac.colision_rect) && pokupljen==false) {
 
-				udaljenost_x = (float)(Math.Abs ((30f * speed_scale) - rectangle.X) * speed_scale);
-				udaljenost_y = (float)(Math.Abs ((80f * speed_scale) - rectangle.Y) * speed_scale);
+				udaljenost_x = (float)(Math.Abs (- rectangle.X) * speed_scale);
+				udaljenost_y = (float)(Math.Abs (- rectangle.Y) * speed_scale);
 				igrac.score += vrijednost;
 				pokupljen = true;
 
