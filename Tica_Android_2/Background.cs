@@ -77,6 +77,24 @@ namespace Tica_Android_2
 		public void Initialize()
 		{
 		}
+		public Player(Texture2D tex,Texture2D tex_stit,Rectangle rect,float resize_scale)
+		{
+			maknut = false;
+			speed = 6*resize_scale;
+			texture = tex;
+			texture_stit = tex_stit;
+			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			alive = true;
+			score = 0;
+			stit = false;
+			playerAnimation.brzina_animacije = 7;
+			playerAnimation.broj_framova_sirina = 5;
+			playerAnimation.broj_framova_visina = 3;
+			playerAnimation.Image = tex;
+			playerAnimation.origin = new Vector2 (tex.Width / 10, tex.Height / 6);
+			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.8f), (int)(rectangle.Height * 0.6f));
+
+		}
 
 		public void Update(GameTime gameTime,int visina_ekrana, int duljina,float resize_scale,float brzina_pozadine)
 		{
@@ -137,14 +155,14 @@ namespace Tica_Android_2
 			if(!maknut)
 			{
 				if (Velocity.X > 0)
-					Velocity.X -= Velocity.X / 38f;
+					Velocity.X -= Velocity.X / 30f;
 				if (Velocity.X < 0)
-						Velocity.X += Math.Abs(Velocity.X) /38f;
+						Velocity.X += Math.Abs(Velocity.X) /30f;
 
 				if (Velocity.Y > 0)
-					Velocity.Y -= Velocity.Y / 38f;
+					Velocity.Y -= Velocity.Y / 30f;
 				if(Velocity.Y <0)
-					Velocity.Y+= Math.Abs(Velocity.Y)/38f;
+					Velocity.Y+= Math.Abs(Velocity.Y)/30f;
 			}
 
 
@@ -168,7 +186,7 @@ namespace Tica_Android_2
 			//uvjet za odbijanje, svi faktori su empiristički uštimani*******************
 			if ((colision_rect.Y > (visina_ekrana - visina_ekrana/4.35f)) || (colision_rect.Y < 0))
 			{
-				rectangle.Y -=(int)(Velocity.Y * 2.5f);
+				rectangle.Y -=(int)(Velocity.Y * 3f);
 				Velocity.Y = -Velocity.Y * 0.65f;
 			}
 			if ((colision_rect.X < -5 && Velocity.X < 0) || colision_rect.X>duljina-colision_rect.Width && Velocity.X>0)
@@ -186,24 +204,7 @@ namespace Tica_Android_2
 		}
 
 
-		public Player(Texture2D tex,Texture2D tex_stit,Rectangle rect,float resize_scale)
-		{
-			maknut = false;
-			speed = 6*resize_scale;
-			texture = tex;
-			texture_stit = tex_stit;
-			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
-			alive = true;
-			score = 0;
-			stit = false;
-			playerAnimation.brzina_animacije = 7;
-			playerAnimation.broj_framova_sirina = 5;
-			playerAnimation.broj_framova_visina = 3;
-			playerAnimation.Image = tex;
-			playerAnimation.origin = new Vector2 (tex.Width / 10, tex.Height / 6);
-			colision_rect = new Rectangle (rect.X, rect.Y, (int)(rectangle.Width*0.8f), (int)(rectangle.Height * 0.6f));
 
-		}
 	}
 
 

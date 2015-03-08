@@ -85,9 +85,25 @@ namespace Tica_Android_2
 	}
 	public class Barijera : Sprite
 	{
+		public string tip;
+		protected CoinWizzard CoinWizz;
 		protected Random r = new Random();
 		public bool coiniziran;
-		public Texture2D coin_txt;
+
+		public Barijera(Texture2D tex, Rectangle rect,float resize_scale,CoinWizzard CoinW)
+		{
+			tip="obicna";
+			CoinWizz = CoinW;
+			texture = tex;
+			coiniziran = false;
+			rectangle =  new Rectangle(rect.X, (int)(resize_scale*rect.Y), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			brzina_kretanja =(int) 3;
+			speed_buffer = 0;
+		}
+		public Barijera()
+		{
+		}
+
 		public virtual void Update(Player igrac,ref int dodatak,int visina,int sirina,List<Barijera> lista, float speed_scale,Song stit_off,List<Coin> lista_c)
 		{
 
@@ -118,27 +134,15 @@ namespace Tica_Android_2
 				if (visina_zadnje > visina / 2)
 					rectangle.Y = r.Next (0, (int)(visina/2)-rectangle.Height);
 				else
-					rectangle.Y = r.Next ((int)(visina/2), (int)(visina-visina/4.7f));
+					rectangle.Y = r.Next ((int)(visina/2), (int)(visina-visina/4.55f));
 
 				lista.RemoveAt (0);
 				lista.Add (this);
 				dodatak = (int)(dodatak * 0.985f);
-				Ubaci_Coine (lista_c, visina, coin_txt, speed_scale);
+				CoinWizz.Ubaci_Coine (lista_c, visina, speed_scale,this);
 			}
 		}
-		public Barijera(Texture2D tex, Rectangle rect,float resize_scale, Texture2D coin)
-		{
-			texture = tex;
-			coin_txt = coin;
-			coiniziran = false;
-			rectangle =  new Rectangle(rect.X, (int)(resize_scale*rect.Y), (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
-			brzina_kretanja =(int) 3;
-			speed_buffer = 0;
 
-		}
-		public Barijera()
-		{
-		}
 
 		public bool Dodir(Player igrac)
 		{
@@ -149,36 +153,42 @@ namespace Tica_Android_2
 		}
 
 
-
+		/*
 		//COINI
-		public void Ubaci_Coine(List<Coin> Coini, int visina,Texture2D tex, float resize_scale)
+		public void Ubaci_Coine(List<Coin> Coini, int visina,Texture2D tex_coin,Texture2D tex_dijamant, float resize_scale)
 		{	int opcija;
 			int gornji_prostor,donji_prostor;
-
+			bool dijamant_in;
 			opcija = r.Next (1,99);
 			if (coiniziran==false) 
 			{
+				dijamant_in = false;
 				gornji_prostor = rectangle.Y;
 				donji_prostor = (int)((visina - (visina / 4.35)) - (rectangle.Y + rectangle.Height));
 
-			if(opcija<60)
-				Skup_Coina (Coini, donji_prostor, gornji_prostor, tex, resize_scale, visina,r.Next(1,5),r.Next(1,7));
-			else
-				Skup_Coina (Coini, donji_prostor, gornji_prostor, tex, resize_scale, visina,r.Next(2,3),r.Next(2,6));
-
-
+				if ((donji_prostor > gornji_prostor && gornji_prostor < (100 * resize_scale) && gornji_prostor > (45 * resize_scale))
+					||(donji_prostor < gornji_prostor && donji_prostor < (85 * resize_scale)&& donji_prostor > (30 * resize_scale)))
+					dijamant_in=true;
+					
+				if(tex_dijamant!=null  && opcija<50 && dijamant_in )
+					Dijamant (Coini, donji_prostor, gornji_prostor, tex_dijamant, resize_scale, visina);
+				else if(tex_dijamant!=null  && opcija<10)
+					Dijamant_norm (Coini, donji_prostor, gornji_prostor, tex_dijamant, resize_scale, visina);
+				else if (opcija <50)
+					Skup_Coina (Coini, donji_prostor, gornji_prostor, tex_coin, resize_scale, visina,r.Next(1,5),r.Next(1,7));
+				else
+					Skup_Coina (Coini, donji_prostor, gornji_prostor, tex_coin, resize_scale, visina,r.Next(2,3),r.Next(2,6));
 			}
 		}
 
+
+
 		public void Skup_Coina (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina,int redovi,int stupci)
 		{
-
 			int pocetni_Y;
 			int pocetni_X;
 			int temp_X;
 			int temp_Y;
-
-
 
 			if (donji_p < gornji_p)
 				pocetni_Y = r.Next (0, rectangle.Y - (int)(redovi*30 * resize_scale));
@@ -196,10 +206,48 @@ namespace Tica_Android_2
 				for(int j=0;j<stupci;j++)
 				{
 					temp_X=pocetni_X+(int)(j*34*resize_scale);
-					Coini.Add (new Coin (tex, new Rectangle (temp_X, temp_Y, 33, 30), resize_scale));
+					Coini.Add (new Coin (tex, new Rectangle (temp_X, temp_Y, 33, 30), resize_scale,coin_zvuk));
 				}
 			}
+		 }
+		public void Dijamant (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina)
+		{
+			int pocetni_Y;
+			int pocetni_X;
+			int temp_X;
+			int temp_Y;
+
+
+			if (donji_p > gornji_p && gornji_p < (100 * resize_scale) && gornji_p > (45 * resize_scale))
+				pocetni_Y = r.Next (0, rectangle.Y-(int)(35*resize_scale));
+			else if (donji_p < gornji_p && donji_p < (85 * resize_scale)&& donji_p > (30 * resize_scale))
+				pocetni_Y = r.Next ((rectangle.Y + rectangle.Height), (int)(visina - (visina / 4.35)));
+			else
+				pocetni_Y = visina*2;
+			pocetni_X = (rectangle.X + rectangle.Width / 2);
+
+			temp_X =r.Next( (int)(pocetni_X-170*resize_scale),pocetni_X+(int)(150*resize_scale));
+			temp_Y = pocetni_Y;
+
+			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,this));
 		}
+
+
+		public void Dijamant_norm (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina)
+		{
+
+			int temp_X;
+			int temp_Y;
+
+			if(donji_p%2==0)
+				temp_X = this.rectangle.X +(int)(r.Next(20,35)*resize_scale);
+			else
+				temp_X = this.rectangle.X -(int)(r.Next(75,85)*resize_scale);
+			temp_Y = this.rectangle.Y+ rectangle.Height/2;
+
+
+			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,this));
+		}*/
 
 	}
 
@@ -209,10 +257,11 @@ namespace Tica_Android_2
 		int visina;
 		public bool gori;
 		public int brzina_gibanja;
-		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int vis,float resize_scale,Texture2D coin)
+
+		public PokretnaBarijera(Texture2D tex, Rectangle rect,bool x,int vis,float resize_scale,CoinWizzard Wizz)
 		{
+			CoinWizz = Wizz;
 			gori = x;
-			coin_txt = coin;
 			texture = tex;
 			rectangle =  new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			brzina_kretanja = 3;

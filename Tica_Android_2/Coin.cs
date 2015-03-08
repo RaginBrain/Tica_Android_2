@@ -7,24 +7,28 @@ using Microsoft.Xna.Framework.Input.Touch;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using System.Threading;
 
 
 namespace Tica_Android_2
 {
 	public class Coin : Sprite
 	{
+
+
+		protected SoundEffect collect_zvuk;
 		public Animation animacija=new Animation();
-		float coin_scale;
+		protected float coin_scale;
 		public int vrijednost;
 
 		public bool pokupljen;
-		float udaljenost_x;
-		float udaljenost_y;
+		protected float udaljenost_x;
+		protected float udaljenost_y;
 
-		public void Update(Player igrac, float speed_scale, GameTime gameTime,int sirina, Scrolling sc)
+		public virtual void Update(Player igrac, float speed_scale, GameTime gameTime,int sirina, float brzina)
 		{   animacija.Update (gameTime);
 
-			brzina_kretanja = sc.brzina_kretanja;
+			brzina_kretanja = brzina;
 			if (pokupljen) {
 				if (rectangle.X >0)
 					rectangle.X -= (int)(udaljenost_x / 19);
@@ -40,8 +44,10 @@ namespace Tica_Android_2
 				speed_buffer-=(float)((int)speed_buffer);
 			}
 
-			if (rectangle.Intersects (igrac.colision_rect) && pokupljen==false) {
+			if (rectangle.Intersects (igrac.colision_rect) && pokupljen==false) 
+			{
 
+				collect_zvuk.Play ();
 				udaljenost_x = (float)(Math.Abs (- rectangle.X) * speed_scale);
 				udaljenost_y = (float)(Math.Abs (- rectangle.Y) * speed_scale);
 				igrac.score += vrijednost;
@@ -53,9 +59,14 @@ namespace Tica_Android_2
 				animacija.active = true;
 				
 		}
-
-		public Coin (Texture2D tex,Rectangle rect,float resize_scale)
+		public Coin()
 		{
+		}
+
+		public Coin (Texture2D tex,Rectangle rect,float resize_scale,SoundEffect coin_sound)
+		{
+			collect_zvuk = coin_sound;
+
 			texture = tex;
 			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
 			vrijednost = 10;
@@ -74,7 +85,7 @@ namespace Tica_Android_2
 			brzina_kretanja = (int)3;
 		}
 
-		public void Draw(SpriteBatch sp,float scale)
+		public virtual void Draw(SpriteBatch sp,float scale)
 		{
 			if(animacija.active)
 			sp.Draw (
@@ -82,7 +93,55 @@ namespace Tica_Android_2
 				, new Vector2(rectangle.X+(scale*animacija.FrameWith/2),rectangle.Y+(scale*animacija.FrameHeight/2))
 				, animacija.suorceRect, Color.White, 0, animacija.origin,(coin_scale*scale), SpriteEffects.None, 0
 			);
-				
+		}
+	}
+
+
+
+
+
+
+	public class Diamond:Coin
+	{
+
+		public Diamond (Texture2D tex,Rectangle rect,float resize_scale,Barijera bar)
+		{
+			brzina_kretanja = (int)3;
+			texture = tex;
+			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
+			vrijednost = 500;
+			pokupljen = false;
+			speed_buffer = 0;
+		}
+
+		public override void Draw (SpriteBatch spriteBatch,float scale)
+		{
+			spriteBatch.Draw (texture, rectangle,Color.White);
+		}
+
+		public override void Update(Player igrac, float speed_scale, GameTime gameTime,int sirina, float brzina)
+		{
+			if (pokupljen) {
+				if (rectangle.X > -rectangle.Width)
+					rectangle.X -= (int)(udaljenost_x / 19);
+				if (rectangle.Y > -rectangle.Height)
+					rectangle.Y -= (int)(udaljenost_y / 19);
+			}
+			brzina_kretanja = brzina;
+			speed_buffer += brzina_kretanja*speed_scale;
+			if (speed_buffer > 1) {
+				rectangle.X -=(int)speed_buffer;
+				speed_buffer-=(float)((int)speed_buffer);
+			}
+
+			if (rectangle.Intersects (igrac.colision_rect) && pokupljen==false) 
+			{
+				udaljenost_x = (float)(Math.Abs (- rectangle.X) * speed_scale);
+				udaljenost_y = (float)(Math.Abs (- rectangle.Y) * speed_scale);
+				igrac.score += vrijednost;
+				pokupljen = true;
+
+			}
 		}
 	}
 }

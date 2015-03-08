@@ -101,6 +101,10 @@
     <AndroidAsset Include="Assets\Content\bg1.png" />
     <AndroidAsset Include="Assets\Content\bg2.png" />
     <AndroidAsset Include="Assets\Content\coin.png" />
+    <AndroidAsset Include="Assets\Content\turtorial.png" />
+    <AndroidAsset Include="Assets\Content\dijamant.png" />
+    <AndroidAsset Include="Assets\Content\Zvukovi\coin_zvuk.wav" />
+    <AndroidAsset Include="Assets\Content\hold.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>

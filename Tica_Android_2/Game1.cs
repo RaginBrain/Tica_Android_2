@@ -22,11 +22,16 @@ namespace Tica_Android_2
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{	
-		public CoinWizzard CoinWizz;
+	
+		CoinWizzard CoinWizz;
 		List<Coin> test_lista_coina;
 		//Coin test_coin;
+		Texture2D turtorial_tex;
+		Texture2D dijamant_tex;
 
 		Song stit_out;
+		SoundEffect coin_zvuk;
+
 		Texture2D kruna;
 		float maca_scale;
 		Vector2 maca_origin;
@@ -40,22 +45,23 @@ namespace Tica_Android_2
 		Texture2D player_textura;
 
 
-		enum GameState { Start, InGame, GameOver };
+		enum GameState { Start, InGame, GameOver,Turtorial };
 		GameState currentGameState = GameState.InGame;
 
 		public void LelevUp()
 		{
-			scrolling1.brzina_kretanja += 0.8f;
-			scrolling2.brzina_kretanja += 0.8f;
-			barijera1.brzina_kretanja += 0.8f;
-			barijera2.brzina_kretanja += 0.8f;
-			barijera3.brzina_kretanja += 0.8f;
-			barijera.brzina_kretanja += 0.8f;
-			player1.speed += (1f*scale);
+			scrolling1.brzina_kretanja += 0.6f*scale;
+			scrolling2.brzina_kretanja += 0.6f*scale;
+			lvlUp.brzina_kretanja = scrolling1.brzina_kretanja;
+			barijera1.brzina_kretanja += 0.6f*scale;
+			barijera2.brzina_kretanja += 0.6f*scale;
+			barijera3.brzina_kretanja += 0.6f*scale;
+			barijera.brzina_kretanja += 0.6f*scale;
+			player1.speed += (0.6f*scale);
 			sljedeciLevel += 1;
-			maca.brzina_kretanja += 0.8f;
-			maca2.brzina_kretanja += 0.8f;
-			pila.brzina_kretanja = maca.brzina_kretanja + 1;
+			maca.brzina_kretanja += 0.6f*scale;
+			maca2.brzina_kretanja += 0.6f*scale;
+			pila.brzina_kretanja = maca.brzina_kretanja + 1*scale;
 
 		}
 		IsolatedStorageFile savegameStorage = IsolatedStorageFile.GetUserStoreForDomain();
@@ -82,7 +88,6 @@ namespace Tica_Android_2
 		Barijera barijera,barijera2;
 		PokretnaBarijera barijera1, barijera3;
 		Random r = new Random();
-		int mjera;
 
 		int udaljenost_barijera;
 
@@ -136,10 +141,6 @@ namespace Tica_Android_2
 			currentGameState = GameState.Start;
 
 
-
-
-
-
 			//gamesave
 			if (savegameStorage.FileExists("high_score.txt")) 
 			{
@@ -162,6 +163,11 @@ namespace Tica_Android_2
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch (GraphicsDevice);
 
+			//ZVUKOVI
+			stit_out = Content.Load<Song> ("Zvukovi/BubblePop");
+			coin_zvuk = Content.Load<SoundEffect> ("Zvukovi/coin_zvuk");
+			//*****************
+			test_lista_coina = new List<Coin> ();
 			txx = Content.Load<Texture2D> ("kocka");
 			red_prepreka = new List<Barijera> ();
 
@@ -169,7 +175,8 @@ namespace Tica_Android_2
 			scrolling1 = new Scrolling(Content.Load<Texture2D>("bg1"), new Rectangle(0, 0, sirina, visina), 3);
 			scrolling2 = new Scrolling(Content.Load<Texture2D>("bg2"), new Rectangle(sirina, 0,sirina, visina), 3);
 
-			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle(sirina/2, visina/2,50, 50),scale);
+
+			player1 = new Player(Content.Load<Texture2D>("tica_gotova"),Content.Load<Texture2D>("tica_stit"), new Rectangle((visina-(int)(visina/4.35f))/2, (visina-(int)(visina/4.35f))/2,50, 50),scale);
 			player_textura = player1.texture;
 
 			//			score = Content.Load<SpriteFont> ("SpriteFont1");
@@ -192,7 +199,8 @@ namespace Tica_Android_2
 			lista_txtr.Add (Content.Load<Texture2D> ("Znamenke/9"));
 
 			rezultat = new Score (lista_txtr);
-
+			turtorial_tex = Content.Load<Texture2D> ("turtorial");
+			kruna=Content.Load<Texture2D>("kruna");
 
 			start_button = new Sprite ();
 			start_button.rectangle = new Rectangle (0, 0, (int)(400*scale),(int)(210*scale));
@@ -204,32 +212,37 @@ namespace Tica_Android_2
 
 			udaljenost_barijera = (int)(300*scale);
 			coin_texture = Content.Load<Texture2D> ("coin");
+			dijamant_tex = Content.Load<Texture2D> ("dijamant");
+			CoinWizz = new CoinWizzard (coin_zvuk,coin_texture,dijamant_tex);
 
 			stit = new Stit(Content.Load<Texture2D>("stit"), new Rectangle(2000, 50, 64, 64),scale);
-			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, (int)(visina-(55*scale)), 150, 50),scale);
+			lvlUp = new LevelUp(Content.Load<Texture2D>("be_ready"), new Rectangle(1500, (int)(visina-(48*scale)), 110, 37),scale);
 
 
-			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(udaljenost_barijera*3, 0, 35, 100),scale,coin_texture);
+			barijera = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(udaljenost_barijera*3, 0, 35, 100),scale,CoinWizz);
 			red_prepreka.Add (barijera);
 
-			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera, 250,  80,  80),scale,coin_texture);
+
+			maca2 = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[0].rectangle.X+udaljenost_barijera, 250,  80,  80),scale,CoinWizz);
 			red_prepreka.Add (maca2);
 
 			barijera1 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"),
-				new Rectangle(red_prepreka[1].rectangle.X+udaljenost_barijera, 100, 35, 100), false, visina,scale,coin_texture);
+				new Rectangle(red_prepreka[1].rectangle.X+udaljenost_barijera, 100, 35, 100), false, visina,scale,CoinWizz);
 			red_prepreka.Add (barijera1);
 
+
 			//pila----------------
-			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 400,  80,  80),scale,coin_texture);
+			pila = new Barijera(Content.Load<Texture2D>("pila"), new Rectangle(red_prepreka[2].rectangle.X+udaljenost_barijera, 300,  80,  80),scale,CoinWizz);
 			red_prepreka.Add (pila);
 
-
 			//--------------------
-			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 400, 35, 100),scale,coin_texture);
+			barijera2 = new Barijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[3].rectangle.X+udaljenost_barijera, 250, 35, 100),scale,CoinWizz);
 			red_prepreka.Add (barijera2);
-			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[4].rectangle.X+udaljenost_barijera, 500, 35, 100), true, sirina,scale,coin_texture);
+
+			barijera3 = new PokretnaBarijera(Content.Load<Texture2D>("barijera"), new Rectangle(red_prepreka[4].rectangle.X+udaljenost_barijera, 500, 35, 100), true, sirina,scale,CoinWizz);
 			red_prepreka.Add (barijera3);
-			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[5].rectangle.X+udaljenost_barijera,200,  80,  80),scale,coin_texture);
+
+			maca = new Barijera(Content.Load<Texture2D>("maca"), new Rectangle(red_prepreka[5].rectangle.X+udaljenost_barijera,200,  80,  80),scale,CoinWizz);
 			red_prepreka.Add (maca);
 
 
@@ -239,14 +252,16 @@ namespace Tica_Android_2
 			maca_scale= ((float)(maca.rectangle.Width) / (float)(maca.texture.Width))*1.3f;
 			maca_origin = new Vector2 (maca.texture.Width/ 2, maca.texture.Height/ 2);
 
-			CoinWizz = new CoinWizzard ();
-
-			test_lista_coina = new List<Coin> ();
 
 
-			kruna=Content.Load<Texture2D>("kruna");
-			//ZVUKOVI
-			stit_out = Content.Load<Song> ("Zvukovi/BubblePop");
+			foreach (Barijera bar in red_prepreka) {
+				CoinWizz.Ubaci_Coine(test_lista_coina, visina, scale,bar);
+			}
+
+
+
+
+
 
 		}
 
@@ -286,12 +301,26 @@ namespace Tica_Android_2
 						pozicija_dodira = new Rectangle ((int)tl.Position.X, (int)tl.Position.Y, 1, 1);
 
 						if (tl.State == TouchLocationState.Pressed && start_button.rectangle.Intersects (pozicija_dodira))
-							currentGameState = GameState.InGame;
+							currentGameState = GameState.Turtorial;
 					
 					}
 
+
 				}
 				break;
+
+
+			case GameState.Turtorial:
+				touchCollection = TouchPanel.GetState ();
+				foreach (TouchLocation tl in touchCollection) {
+					if ((tl.State == TouchLocationState.Pressed) || (tl.State == TouchLocationState.Moved)) {
+						if (tl.State == TouchLocationState.Pressed)
+							currentGameState = GameState.InGame;
+					}
+				}
+				break;
+
+
 			case GameState.InGame:
 
 				// Pozadina*********************************************************************
@@ -305,16 +334,17 @@ namespace Tica_Android_2
 
 
 				//test_coin.Update (player1, scale, gameTime, sirina);
-				for (int i=0; i<test_lista_coina.Count;i++) 
-				{
-					test_lista_coina[i].Update (player1, scale, gameTime, sirina,scrolling1);
+			
+				for (int i = 0; i < test_lista_coina.Count; i++) {
 					if (test_lista_coina [i].rectangle.X < (-33 * scale))
 						test_lista_coina.RemoveAt (i);
+					test_lista_coina [i].Update (player1, scale, gameTime, sirina, scrolling1.brzina_kretanja);
+
 
 				}
 
 				rezultat.Update (player1.score);
-
+				CoinWizz.Update ();
 				stit.Update (player1, (int)(350*scale), lvlUp,scale);
 				player1.Update (gameTime, graphics.PreferredBackBufferHeight, graphics.PreferredBackBufferWidth,scale,scrolling1.brzina_kretanja);
 
@@ -415,6 +445,23 @@ namespace Tica_Android_2
 				spriteBatch.End ();
 
 				break;
+			
+			case GameState.Turtorial:
+				spriteBatch.Begin (SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+				scrolling1.Draw (spriteBatch);
+				scrolling2.Draw (spriteBatch);
+				spriteBatch.Draw(turtorial_tex,new Rectangle(player1.colision_rect.X+player1.colision_rect.Width-(visina-(int)(visina/4.35f))/2,player1.colision_rect.Y+player1.colision_rect.Height-(visina-(int)(visina/4.35f))/2,(visina-(int)(visina/4.35f)),(visina-(int)(visina/4.35f))),Color.White);
+				try{
+					rezultat.Draw (spriteBatch, 5, 5, (int)(15*scale), (int)(40*scale));
+				}
+				catch{}
+
+
+				spriteBatch.End ();
+
+				break;
+
+
 			case GameState.InGame:
 				{
 
