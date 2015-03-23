@@ -116,13 +116,14 @@ namespace Tica_Android_2
 
 			if (Dodir (igrac))
 			if (igrac.stit == true) {
-				MediaPlayer.Play (stit_off);
-				rectangle.Y = 2 * visina;
+				rectangle.Y = -2 * visina;
 				igrac.colision_rect = new Rectangle (igrac.colision_rect.X, igrac.colision_rect.Y, (int)(igrac.rectangle.Width * 0.8f), (int)(igrac.rectangle.Height * 0.6f));
 				igrac.stit = false;
-			}
-			else
+			} else {
+				if ((rectangle.Center.X) > igrac.colision_rect.Center.X)
+					igrac.ubodena_s_liva = true;
 				igrac.alive = false;
+			}
 
 
 
@@ -134,7 +135,7 @@ namespace Tica_Android_2
 				if (visina_zadnje > visina / 2)
 					rectangle.Y = r.Next (0, (int)(visina/2)-rectangle.Height);
 				else
-					rectangle.Y = r.Next ((int)(visina/2), (int)(visina-visina/4.55f));
+					rectangle.Y = r.Next ((int)(visina/2), (int)(visina-visina/4.3f - rectangle.Height));
 
 				lista.RemoveAt (0);
 				lista.Add (this);
@@ -151,105 +152,9 @@ namespace Tica_Android_2
 			else
 				return false;
 		}
-
-
-		/*
-		//COINI
-		public void Ubaci_Coine(List<Coin> Coini, int visina,Texture2D tex_coin,Texture2D tex_dijamant, float resize_scale)
-		{	int opcija;
-			int gornji_prostor,donji_prostor;
-			bool dijamant_in;
-			opcija = r.Next (1,99);
-			if (coiniziran==false) 
-			{
-				dijamant_in = false;
-				gornji_prostor = rectangle.Y;
-				donji_prostor = (int)((visina - (visina / 4.35)) - (rectangle.Y + rectangle.Height));
-
-				if ((donji_prostor > gornji_prostor && gornji_prostor < (100 * resize_scale) && gornji_prostor > (45 * resize_scale))
-					||(donji_prostor < gornji_prostor && donji_prostor < (85 * resize_scale)&& donji_prostor > (30 * resize_scale)))
-					dijamant_in=true;
-					
-				if(tex_dijamant!=null  && opcija<50 && dijamant_in )
-					Dijamant (Coini, donji_prostor, gornji_prostor, tex_dijamant, resize_scale, visina);
-				else if(tex_dijamant!=null  && opcija<10)
-					Dijamant_norm (Coini, donji_prostor, gornji_prostor, tex_dijamant, resize_scale, visina);
-				else if (opcija <50)
-					Skup_Coina (Coini, donji_prostor, gornji_prostor, tex_coin, resize_scale, visina,r.Next(1,5),r.Next(1,7));
-				else
-					Skup_Coina (Coini, donji_prostor, gornji_prostor, tex_coin, resize_scale, visina,r.Next(2,3),r.Next(2,6));
-			}
-		}
-
-
-
-		public void Skup_Coina (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina,int redovi,int stupci)
-		{
-			int pocetni_Y;
-			int pocetni_X;
-			int temp_X;
-			int temp_Y;
-
-			if (donji_p < gornji_p)
-				pocetni_Y = r.Next (0, rectangle.Y - (int)(redovi*30 * resize_scale));
-			else
-				pocetni_Y=r.Next((rectangle.Y+rectangle.Height),(int)(visina - (visina / 4.35))-(int)(redovi*30 * resize_scale));
-
-			pocetni_X = (rectangle.X + rectangle.Width / 2) - (int)(5 * 33 * resize_scale);
-
-			temp_X = pocetni_X;
-			temp_Y = pocetni_Y;
-
-			for(int i=0;i<redovi;i++)
-			{
-				temp_Y=pocetni_Y+(int)(i*33*resize_scale);
-				for(int j=0;j<stupci;j++)
-				{
-					temp_X=pocetni_X+(int)(j*34*resize_scale);
-					Coini.Add (new Coin (tex, new Rectangle (temp_X, temp_Y, 33, 30), resize_scale,coin_zvuk));
-				}
-			}
-		 }
-		public void Dijamant (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina)
-		{
-			int pocetni_Y;
-			int pocetni_X;
-			int temp_X;
-			int temp_Y;
-
-
-			if (donji_p > gornji_p && gornji_p < (100 * resize_scale) && gornji_p > (45 * resize_scale))
-				pocetni_Y = r.Next (0, rectangle.Y-(int)(35*resize_scale));
-			else if (donji_p < gornji_p && donji_p < (85 * resize_scale)&& donji_p > (30 * resize_scale))
-				pocetni_Y = r.Next ((rectangle.Y + rectangle.Height), (int)(visina - (visina / 4.35)));
-			else
-				pocetni_Y = visina*2;
-			pocetni_X = (rectangle.X + rectangle.Width / 2);
-
-			temp_X =r.Next( (int)(pocetni_X-170*resize_scale),pocetni_X+(int)(150*resize_scale));
-			temp_Y = pocetni_Y;
-
-			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,this));
-		}
-
-
-		public void Dijamant_norm (List<Coin> Coini,int donji_p,int gornji_p,Texture2D tex,float resize_scale,int visina)
-		{
-
-			int temp_X;
-			int temp_Y;
-
-			if(donji_p%2==0)
-				temp_X = this.rectangle.X +(int)(r.Next(20,35)*resize_scale);
-			else
-				temp_X = this.rectangle.X -(int)(r.Next(75,85)*resize_scale);
-			temp_Y = this.rectangle.Y+ rectangle.Height/2;
-
-
-			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,this));
-		}*/
-
 	}
+
+
 
 	class PokretnaBarijera : Barijera
 	{

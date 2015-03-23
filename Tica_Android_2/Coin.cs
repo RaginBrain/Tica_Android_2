@@ -104,8 +104,9 @@ namespace Tica_Android_2
 	public class Diamond:Coin
 	{
 
-		public Diamond (Texture2D tex,Rectangle rect,float resize_scale,Barijera bar)
+		public Diamond (Texture2D tex,SoundEffect zvuk,Rectangle rect,float resize_scale,Barijera bar)
 		{
+			collect_zvuk = zvuk;
 			brzina_kretanja = (int)3;
 			texture = tex;
 			rectangle = new Rectangle(rect.X, rect.Y, (int)Math.Round(rect.Width*resize_scale) , (int)Math.Round(rect.Height*resize_scale));
@@ -136,6 +137,7 @@ namespace Tica_Android_2
 
 			if (rectangle.Intersects (igrac.colision_rect) && pokupljen==false) 
 			{
+				collect_zvuk.Play ();
 				udaljenost_x = (float)(Math.Abs (- rectangle.X) * speed_scale);
 				udaljenost_y = (float)(Math.Abs (- rectangle.Y) * speed_scale);
 				igrac.score += vrijednost;

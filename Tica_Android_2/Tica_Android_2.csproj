@@ -67,6 +67,7 @@
     <Compile Include="Barijera.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="CoinWizzard.cs" />
+    <Compile Include="Botun.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Icon.png" />
@@ -80,10 +81,7 @@
     <AndroidAsset Include="Assets\Content\be_ready.png" />
     <AndroidAsset Include="Assets\Content\game_over.png" />
     <AndroidAsset Include="Assets\Content\maca.png" />
-    <AndroidAsset Include="Assets\Content\oblak_start.png" />
     <AndroidAsset Include="Assets\Content\stit.png" />
-    <AndroidAsset Include="Assets\Content\tica_gotova.png" />
-    <AndroidAsset Include="Assets\Content\tica_stit.png" />
     <AndroidAsset Include="Assets\Content\Znamenke\0.png" />
     <AndroidAsset Include="Assets\Content\Znamenke\1.png" />
     <AndroidAsset Include="Assets\Content\Znamenke\2.png" />
@@ -105,10 +103,27 @@
     <AndroidAsset Include="Assets\Content\dijamant.png" />
     <AndroidAsset Include="Assets\Content\Zvukovi\coin_zvuk.wav" />
     <AndroidAsset Include="Assets\Content\hold.png" />
+    <AndroidAsset Include="Assets\Content\Zvukovi\pisma_igre.mp3" />
+    <AndroidAsset Include="Assets\Content\Botuni\score_scroll.png" />
+    <AndroidAsset Include="Assets\Content\Botuni\repeat_jaje.png" />
+    <AndroidAsset Include="Assets\Content\Zvukovi\dijamant_zvuk.wav" />
+    <AndroidAsset Include="Assets\Content\Botuni\nazad_jaje.png" />
+    <AndroidAsset Include="Assets\Content\Botuni\options_oblak.png" />
+    <AndroidAsset Include="Assets\Content\Botuni\shop_oblak.png" />
+    <AndroidAsset Include="Assets\Content\Botuni\oblak_start.png" />
+    <AndroidAsset Include="Assets\Content\Botuni\centar_hint.png" />
+    <AndroidAsset Include="Assets\Content\Tice\ranjena1.png" />
+    <AndroidAsset Include="Assets\Content\Tice\tica_gotova1.png" />
+    <AndroidAsset Include="Assets\Content\Tice\tica_stit1.png" />
+    <AndroidAsset Include="Assets\Content\Tice\ranjena0.png" />
+    <AndroidAsset Include="Assets\Content\Tice\tica_gotova0.png" />
+    <AndroidAsset Include="Assets\Content\Tice\tica_stit0.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Assets\Content\Znamenke\" />
     <Folder Include="Assets\Content\Zvukovi\" />
+    <Folder Include="Assets\Content\Botuni\" />
+    <Folder Include="Assets\Content\Tice\" />
   </ItemGroup>
 </Project>

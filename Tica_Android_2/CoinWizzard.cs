@@ -18,10 +18,12 @@ namespace Tica_Android_2
 		protected Texture2D tex_coin;
 		protected Texture2D tex_dijamant;
 		protected SoundEffect coin_zvuk;
+		protected SoundEffect dijamnat_zvuk;
 
 
-		public CoinWizzard(SoundEffect zvuk,Texture2D tex_c,Texture2D tex_d)
+		public CoinWizzard(SoundEffect zvuk,SoundEffect d_zvuk,Texture2D tex_c,Texture2D tex_d)
 		{
+			dijamnat_zvuk = d_zvuk;
 			coin_zvuk = zvuk;
 			tex_coin=tex_c;
 			tex_dijamant=tex_d;
@@ -113,7 +115,7 @@ namespace Tica_Android_2
 			temp_X =r.Next( (int)(pocetni_X-170*resize_scale),pocetni_X+(int)(150*resize_scale));
 			temp_Y = pocetni_Y;
 
-			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,bar));
+			Coini.Add (new Diamond (tex,dijamnat_zvuk, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,bar));
 		}
 
 
@@ -130,7 +132,7 @@ namespace Tica_Android_2
 			temp_Y = bar.rectangle.Y+ bar.rectangle.Height/2;
 
 
-			Coini.Add (new Diamond (tex, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,bar));
+			Coini.Add (new Diamond (tex,dijamnat_zvuk, new Rectangle (temp_X, temp_Y, 55, 50), resize_scale,bar));
 		}
 	}
 
